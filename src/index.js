@@ -3,11 +3,6 @@ var video = document.querySelector("#videoElement");
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri("../src/models"),
   faceapi.nets.faceLandmark68Net.loadFromUri("../src/models")
-  // faceapi.nets.faceRecognitionNet.loadFromUri("../src/models"),
-  // faceapi.nets.faceExpressionNet.loadFromUri("../src/models")
-  // faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
-  // faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
-  // faceapi.nets.ssdMobilenetv1.loadFromUri("/models")
 ]).then(start);
 
 function start() {
@@ -30,6 +25,7 @@ video.addEventListener("play", () => {
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
     faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+
     const landmarks = await faceapi.detectFaceLandmarks(video);
     const mouth = landmarks.getMouth();
     mouthCoordinates(mouth);
