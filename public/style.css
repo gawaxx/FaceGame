@@ -11,6 +11,7 @@ body {
         display: flex;
         justify-content: center;
         align-items: center;
+        background-color: black;
 }
 
 canvas {
@@ -24,4 +25,3 @@ canvas {
     width: 60px;
     font-size: 60px;
   }
-

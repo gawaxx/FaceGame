@@ -89,7 +89,8 @@ class MovingObject {
     let leftNumbers = this.element.style.left.replace("px", "");
     let left = parseInt(leftNumbers, 10);
      
-    if (left > 0) { this.element.style.left = `${left + 20}px`;}
+    if (left > 1500) {this.element.remove()}
+    else if (left > 0) { this.element.style.left = `${left + 20}px`;}
   }
 
 }
