@@ -1,9 +1,15 @@
 var video = document.querySelector("#videoElement");
+
+window.addEventListener("click", () => {
+  console.log(`${event.clientX},${event.clientY}`);
+});
+
 const mainContainer = document.querySelector('.container')
 
 Promise.all([
-  faceapi.nets.tinyFaceDetector.loadFromUri("../src/models"),
-  faceapi.nets.faceLandmark68Net.loadFromUri("../src/models")
+  // faceapi.nets.tinyFaceDetector.loadFromUri("../src/models"),
+  faceapi.nets.faceLandmark68TinyNet.loadFromUri("../src/models")
+  // faceapi.nets.faceLandmark68Net.loadFromUri("../src/models")
 ]).then(start);
 
 function start() {
@@ -15,31 +21,57 @@ function start() {
 }
 
 video.addEventListener("play", () => {
-  const canvas = faceapi.createCanvasFromMedia(video);
-  document.body.append(canvas);
-  const displaySize = { width: video.width, height: video.height };
-  faceapi.matchDimensions(canvas, displaySize);
+  // const canvas = faceapi.createCanvasFromMedia(video);
+  // document.body.append(canvas);
+  // const displaySize = { width: video.width, height: video.height };
+  // faceapi.matchDimensions(canvas, displaySize);
   setInterval(async () => {
-    const detections = await faceapi
-    .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
-    .withFaceLandmarks();
-    const resizedDetections = faceapi.resizeResults(detections, displaySize);
-    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-    faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-    const landmarks = await faceapi.detectFaceLandmarks(video);
+    // const detections = await faceapi
+    //   .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
+    //   .withFaceLandmarks();
+    // const resizedDetections = faceapi.resizeResults(detections, displaySize);
+    // canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+    // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+
+    const landmarks = await faceapi.detectFaceLandmarksTiny(video);
     const mouth = landmarks.getMouth();
     const usefullPoints = []
-    startThrow(mouth)
-    // mouthCoordinates(mouth);
-    // console.log(`X: ${mouth0._x}, Y: ${mouth0._y}`);
-  }, 2);
+    const adjMouth = mouthCoordinates(mouth);
+    startThrow(adjMouth)
+   
+    mouthIsOpen(adj);
+  }, 500);
 });
 
 
 function mouthCoordinates(mouth) {
-  let innerLip = mouth.slice(-8);
-  innerLip.forEach(landmark =>
-    console.log(`X: ${landmark._x}, Y: ${landmark._y}`)
+  adjMouth = [];
+  mouth.forEach(landmark => {
+    x = landmark.x + (window.innerWidth - video.width) / 2;
+    y = landmark.y + (window.innerHeight - video.height) / 2;
+    adjMouth.push({ x, y });
+  });
+  return adjMouth;
+}
+
+function mouthIsOpen(mouth) {
+  // let outerLipTop = mouth[9];
+  // let innerLipTop = mouth[18];
+  // let innerLipBottom = mouth[14];
+  // let outerLipBottom = mouth[3];
+
+  const mouthHeight = faceapi.euclideanDistance(
+    [mouth[14].x, mouth[14].y],
+    [mouth[18].x, mouth[18].y]
+  );
+  const lipHeight = faceapi.euclideanDistance(
+    [mouth[9].x, mouth[9].y],
+    [mouth[3].x, mouth[3].y]
+  );
+
+  let mouthOpen = mouthHeight > 50;
+  console.log(mouthOpen);
+  return mouthOpen;
 )};
 
 
