@@ -1,4 +1,5 @@
 var video = document.querySelector("#videoElement");
+const mainContainer = document.querySelector('.container')
 
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri("../src/models"),
@@ -38,6 +39,7 @@ video.addEventListener("play", () => {
     // console.log(`X: ${mouth0._x}, Y: ${mouth0._y}`);
   }, 500);
 });
+
 // class MovingObject {
 
 //   constructor(){
@@ -70,7 +72,14 @@ video.addEventListener("play", () => {
 // // document.addEventListener('keypress', myEventHandler)
 
 // const player = new MovingObject()
-
+class MovingObject {
+  constructor(){
+    let newDiv = document.createElement('div')
+    newDiv.className = "Element"
+    newDiv.innerHTML = "😎"
+    mainContainer.append(newDiv)
+  }
+}
 
 let dodger = document.getElementById("dodger");
 

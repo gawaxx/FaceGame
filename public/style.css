@@ -18,7 +18,7 @@ canvas {
 }
 
 #dodger {
-    background-color: black;
+    /* background-color: black; */
     height: 60px;
     position: absolute;
     width: 60px;
