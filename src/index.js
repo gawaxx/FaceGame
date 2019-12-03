@@ -28,16 +28,16 @@ video.addEventListener("play", () => {
     faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
     const landmarks = await faceapi.detectFaceLandmarks(video);
     const mouth = landmarks.getMouth();
-    mouthCoordinates(mouth);
+    // mouthCoordinates(mouth);
     // console.log(`X: ${mouth0._x}, Y: ${mouth0._y}`);
-  }, 1);
+  }, 500);
 });
 
 function mouthCoordinates(mouth) {
   let innerLip = mouth.slice(-8);
   innerLip.forEach(landmark =>
     console.log(`X: ${landmark._x}, Y: ${landmark._y}`)
-  );
+)};
 
 
 class MovingObject {
@@ -61,8 +61,7 @@ class MovingObject {
 
 }
 const objects = []
-let object = new MovingObject(); 
 setInterval(() => {
   objects.push(new MovingObject())
 }, 5000)
-setInterval( () => { objects.forEach(object => object.moveDodgerRight() )}, 300)}
+setInterval( () => { objects.forEach(object => object.moveDodgerRight() )}, 300)
