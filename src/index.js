@@ -1,5 +1,6 @@
 var video = document.querySelector("#videoElement");
 var mouthPoints = [];
+const body = document.querySelector('body')
 
 window.addEventListener("click", () => {
   console.log(`${event.clientX},${event.clientY}`);
@@ -8,7 +9,7 @@ window.addEventListener("click", () => {
 const mainContainer = document.querySelector('.container')
 
 Promise.all([
-  faceapi.nets.faceLandmark68TinyNet.loadFromUri("../src/models"),
+  faceapi.nets.faceLandmark68TinyNet.loadFromUri("../src/models")
   // faceapi.nets.tinyFaceDetector.loadFromUri("../src/models"),
   // faceapi.nets.faceLandmark68Net.loadFromUri("../src/models")
 ]).then(start);
@@ -67,6 +68,7 @@ function mouthIsOpen(mouth) {
   // let innerLipTop = mouth[18];
   // let innerLipBottom = mouth[14];
   // let outerLipBottom = mouth[3];
+  
 
   const mouthHeight = faceapi.euclideanDistance(
     [mouth[14].x, mouth[14].y],
@@ -91,7 +93,7 @@ class MovingObject {
     newDiv.innerHTML = "🥖"
     // this.x = 40;
     // this.y = 40;
-    mainContainer.append(newDiv)
+    body.append(newDiv)
     this.element = newDiv
     this.element.style.left = `${0}px`
     this.element.style.bottom = `${300}px`
@@ -115,7 +117,7 @@ class MovingObject {
   }
 
   isCollide() {
-
+    // console.log(`${mouthPoints[9].x}, ${mouthPoints[9].y}`)
     // debugger
     let xPosition = parseInt(this.element.style.left.replace("px", ""),10);
     let yPosition = window.innerHeight - parseInt(this.element.style.bottom.replace("px", ""),10);
@@ -129,6 +131,7 @@ class MovingObject {
         rect1.x + rect1.width > rect2.x &&
         rect1.y < rect2.y + rect2.height &&
         rect1.y + rect1.height > rect2.y) {
+          // debugger
         console.log("Collision")
       }
     }

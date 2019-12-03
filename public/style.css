@@ -20,9 +20,7 @@ canvas {
 
 video {
     /* All below is optional */
-    position: absolute; 
-    left: 25%;
-    top: 16%;
+    position: flex; 
 }
 
 .dodger {
