@@ -33,3 +33,32 @@ video.addEventListener("play", () => {
     faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
   }, 100);
 });
+
+class MovingObject {
+
+  constructor(startingPos){
+    this.width = "40px";
+    this.height = "40px";
+    this.x = startingPos.x;
+    this.y = startingPos.y;
+    console.log("Object has been created")
+  }
+
+  getPosition(){
+    return { x: this.x, y: this.y }
+  }
+
+  update() {
+    this.x += 1;
+  }
+
+}
+document.addEventListener('keypress', myEventHandler)
+
+function myEventHandler(e){
+  // debugger
+  const keyCode = e.keyCode;
+  if (keyCode === 115) {
+      console.log("STOP tOUCHING THE KEYBOARD");
+  }
+};
