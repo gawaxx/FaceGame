@@ -3,12 +3,7 @@ const mainContainer = document.querySelector('.container')
 
 Promise.all([
   faceapi.nets.tinyFaceDetector.loadFromUri("../src/models"),
-  faceapi.nets.faceLandmark68Net.loadFromUri("../src/models"),
-  faceapi.nets.faceRecognitionNet.loadFromUri("../src/models"),
-  faceapi.nets.faceExpressionNet.loadFromUri("../src/models")
-  // faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
-  // faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
-  // faceapi.nets.ssdMobilenetv1.loadFromUri("/models")
+  faceapi.nets.faceLandmark68Net.loadFromUri("../src/models")
 ]).then(start);
 
 function start() {
@@ -33,45 +28,16 @@ video.addEventListener("play", () => {
     faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
     const landmarks = await faceapi.detectFaceLandmarks(video);
     const mouth = landmarks.getMouth();
-    // mouthCoordinates(mouth);
-    // mouthIsOpen(mouth);
-    // console.log(mouthIsOpen(mouth));
+    mouthCoordinates(mouth);
     // console.log(`X: ${mouth0._x}, Y: ${mouth0._y}`);
-  }, 500);
+  }, 1);
 });
 
-// class MovingObject {
-
-//   constructor(){
-//     // this.width = "40px";
-//     // this.height = "40px";
-//     // this.x = startingPos.x;
-//     // this.y = startingPos.y;
-//     this.setUpKeyHandlers();
-//     console.log("Object has been created")
-//     let newDiv = document.createElement('div')
-//     newDiv.className = "Element"
-//     otherDiv.append(newDiv)
-//   }
-
-//   getPosition(){
-//     return { x: this.x, y: this.y }
-//   }
-
-//   setUpKeyHandlers() {
-//       window.addEventListener("keypress", e => {
-//         const keyCode = e.keyCode
-//         if (keyCode === 115) {
-//           this.newDiv.x++;
-//           console.log(player)
-//         }
-//       });
-//     };
-  
-// }
-// // document.addEventListener('keypress', myEventHandler)
-
-// const player = new MovingObject()
+function mouthCoordinates(mouth) {
+  let innerLip = mouth.slice(-8);
+  innerLip.forEach(landmark =>
+    console.log(`X: ${landmark._x}, Y: ${landmark._y}`)
+  );
 
 
 class MovingObject {
@@ -100,3 +66,4 @@ setInterval(() => {
   objects.push(new MovingObject())
 }, 5000)
 setInterval( () => { objects.forEach(object => object.moveDodgerRight() )}, 300)
+
