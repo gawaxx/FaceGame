@@ -25,40 +25,95 @@ video.addEventListener("play", () => {
   faceapi.matchDimensions(canvas, displaySize);
   setInterval(async () => {
     const detections = await faceapi
-      .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+      .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks();
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-    // faceapi.draw.drawDetections(canvas, resizedDetections);
     faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-  }, 100);
+    const landmarks = await faceapi.detectFaceLandmarks(video);
+    const mouth = landmarks.getMouth();
+    // mouthCoordinates(mouth);
+    // mouthIsOpen(mouth);
+    // console.log(mouthIsOpen(mouth));
+    // console.log(`X: ${mouth0._x}, Y: ${mouth0._y}`);
+  }, 500);
 });
+// class MovingObject {
 
-class MovingObject {
+//   constructor(){
+//     // this.width = "40px";
+//     // this.height = "40px";
+//     // this.x = startingPos.x;
+//     // this.y = startingPos.y;
+//     this.setUpKeyHandlers();
+//     console.log("Object has been created")
+//     let newDiv = document.createElement('div')
+//     newDiv.className = "Element"
+//     otherDiv.append(newDiv)
+//   }
 
-  constructor(startingPos){
-    this.width = "40px";
-    this.height = "40px";
-    this.x = startingPos.x;
-    this.y = startingPos.y;
-    console.log("Object has been created")
-  }
+//   getPosition(){
+//     return { x: this.x, y: this.y }
+//   }
 
-  getPosition(){
-    return { x: this.x, y: this.y }
-  }
+//   setUpKeyHandlers() {
+//       window.addEventListener("keypress", e => {
+//         const keyCode = e.keyCode
+//         if (keyCode === 115) {
+//           this.newDiv.x++;
+//           console.log(player)
+//         }
+//       });
+//     };
+  
+// }
+// // document.addEventListener('keypress', myEventHandler)
 
-  update() {
-    this.x += 1;
-  }
+// const player = new MovingObject()
 
+
+let dodger = document.getElementById("dodger");
+
+function moveDodgerLeft() {
+    let leftNumbers = dodger.style.left.replace("px", "");
+    let left = parseInt(leftNumbers, 10);
+   
+    if (left > 0) { dodger.style.left = `${left - 1}px`;}
 }
-document.addEventListener('keypress', myEventHandler)
 
-function myEventHandler(e){
-  // debugger
-  const keyCode = e.keyCode;
-  if (keyCode === 115) {
-      console.log("STOP tOUCHING THE KEYBOARD");
-  }
-};
+function moveDodgerRight() {
+    let leftNumbers = dodger.style.left.replace("px", "");
+    let left = parseInt(leftNumbers, 10);
+   
+    if (left > 0) { dodger.style.left = `${left + 1}px`;}
+}
+
+function moveDodgerUp() {
+  let bottomNumbers = dodger.style.bottom.replace("px", "");
+    let bottom = parseInt(bottomNumbers, 10);
+   
+    if (bottom > 0) { dodger.style.bottom = `${bottom + 1}px`;}
+}
+
+function moveDodgerDown() {
+  let bottomNumbers = dodger.style.bottom.replace("px", "");
+    let bottom = parseInt(bottomNumbers, 10);
+   
+    if (bottom > 0) { dodger.style.bottom = `${bottom - 1}px`; }
+}
+  
+
+document.addEventListener("keydown", function(e) {
+    if (e.key === "ArrowLeft") {
+      moveDodgerLeft();
+    }
+    else if (e.key === "ArrowRight") {
+        moveDodgerRight();
+    }
+    else if (e.key === "ArrowUp") {
+      moveDodgerUp();
+    }
+    else if (e.key === "ArrowDown") {
+      moveDodgerDown();
+    }
+});
