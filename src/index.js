@@ -72,57 +72,30 @@ video.addEventListener("play", () => {
 // // document.addEventListener('keypress', myEventHandler)
 
 // const player = new MovingObject()
+
+
 class MovingObject {
   constructor(){
     let newDiv = document.createElement('div')
-    newDiv.className = "Element"
+    newDiv.id = 'dodger'
+    newDiv.className = "dodger"
     newDiv.innerHTML = "😎"
     mainContainer.append(newDiv)
+    this.element = newDiv
+    this.element.style.left = `${20}px`
   }
-}
-
-let dodger = document.getElementById("dodger");
-
-function moveDodgerLeft() {
-    let leftNumbers = dodger.style.left.replace("px", "");
-    let left = parseInt(leftNumbers, 10);
-   
-    if (left > 0) { dodger.style.left = `${left - 1}px`;}
-}
-
-function moveDodgerRight() {
-    let leftNumbers = dodger.style.left.replace("px", "");
-    let left = parseInt(leftNumbers, 10);
-   
-    if (left > 0) { dodger.style.left = `${left + 1}px`;}
-}
-
-function moveDodgerUp() {
-  let bottomNumbers = dodger.style.bottom.replace("px", "");
-    let bottom = parseInt(bottomNumbers, 10);
-   
-    if (bottom > 0) { dodger.style.bottom = `${bottom + 1}px`;}
-}
-
-function moveDodgerDown() {
-  let bottomNumbers = dodger.style.bottom.replace("px", "");
-    let bottom = parseInt(bottomNumbers, 10);
-   
-    if (bottom > 0) { dodger.style.bottom = `${bottom - 1}px`; }
-}
   
+  moveDodgerRight() {
+    let leftNumbers = this.element.style.left.replace("px", "");
+    let left = parseInt(leftNumbers, 10);
+     
+    if (left > 0) { this.element.style.left = `${left + 20}px`;}
+  }
 
-document.addEventListener("keydown", function(e) {
-    if (e.key === "ArrowLeft") {
-      moveDodgerLeft();
-    }
-    else if (e.key === "ArrowRight") {
-        moveDodgerRight();
-    }
-    else if (e.key === "ArrowUp") {
-      moveDodgerUp();
-    }
-    else if (e.key === "ArrowDown") {
-      moveDodgerDown();
-    }
-});
+}
+const objects = []
+let object = new MovingObject(); 
+setInterval(() => {
+  objects.push(new MovingObject())
+}, 5000)
+setInterval( () => { objects.forEach(object => object.moveDodgerRight() )}, 300)

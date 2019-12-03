@@ -17,7 +17,7 @@ canvas {
     position: absolute;
 }
 
-#dodger {
+.dodger {
     /* background-color: black; */
     height: 60px;
     position: absolute;
