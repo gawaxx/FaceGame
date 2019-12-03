@@ -1,7 +1,11 @@
 var video = document.querySelector("#videoElement");
+
 window.addEventListener("click", () => {
   console.log(`${event.clientX},${event.clientY}`);
 });
+
+const mainContainer = document.querySelector('.container')
+
 Promise.all([
   // faceapi.nets.tinyFaceDetector.loadFromUri("../src/models"),
   faceapi.nets.faceLandmark68TinyNet.loadFromUri("../src/models")
@@ -31,10 +35,14 @@ video.addEventListener("play", () => {
 
     const landmarks = await faceapi.detectFaceLandmarksTiny(video);
     const mouth = landmarks.getMouth();
-    let adj = mouthCoordinates(mouth);
+    const usefullPoints = []
+    const adjMouth = mouthCoordinates(mouth);
+    startThrow(adjMouth)
+   
     mouthIsOpen(adj);
   }, 500);
 });
+
 
 function mouthCoordinates(mouth) {
   adjMouth = [];
@@ -64,4 +72,54 @@ function mouthIsOpen(mouth) {
   let mouthOpen = mouthHeight > 50;
   console.log(mouthOpen);
   return mouthOpen;
+)};
+
+
+class MovingObject {
+  constructor(){
+    let newDiv = document.createElement('div')
+    newDiv.id = 'dodger'
+    newDiv.className = "dodger"
+    newDiv.innerHTML = "😎"
+    this.x = 10;
+    this.y = 10;
+    mainContainer.append(newDiv)
+    this.element = newDiv
+    this.element.style.left = `${20}px`
+  }
+  
+  moveDodgerRight() {
+    let leftNumbers = this.element.style.left.replace("px", "");
+    let left = parseInt(leftNumbers, 10);
+
+    // let bottomNumbers = this.element.style.left.replace("px", "");
+    // let bottom = parseInt(bottomNumbers, 10);
+     
+    if (left > 1500) {this.element.remove()}
+    else if (left > 0) { this.element.style.left = `${left + 20}px`; this.x = left + 20 }
+  }
+
+  isCollide(mouth) {
+    debugger
+    let rect1 = {x: this.x, y: this.y, width: 60, height: 60}
+    let rect2 = {x: mouth.x , y: mouth.y , width: mouth.width, height: mouth.height} 
+    if (rect1.x < rect2.x + rect2.width &&
+      rect1.x + rect1.width > rect2.x &&
+      rect1.y < rect2.y + rect2.height &&
+      rect1.y + rect1.height > rect2.y) {
+       console.log("Collision")
+   }
+  }
 }
+
+function startThrow(mouth){
+  const objects = []
+  setInterval(() => {
+    objects.push(new MovingObject())
+  }, 5000)
+  setInterval( () => { objects.forEach(object => object.moveDodgerRight() )} , 300)
+  setInterval( () => {objects.forEach(object => object.isCollide(mouth))}, 10 )
+}
+
+
+

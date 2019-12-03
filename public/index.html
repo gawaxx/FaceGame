@@ -1,39 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
+      <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="utf-8" />
     <title>Display Webcam Stream</title>
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      /* #container {
-        margin: 0px auto;
-        width: 500px;
-        height: 375px;
-        border: 10px #333 solid;
-      }
-      #videoElement {
-        width: 500px;
-        height: 375px;
-        background-color: #666;
-      } */
-      canvas {
-        position: absolute;
-      }
-    </style>
   </head>
 
   <body>
-    <!-- <div id="container"> -->
-    <video id="videoElement" width="720" height="560" autoplay muted></video>
-    <!-- </div> -->
+    <div class="container">
+      <video id="videoElement" width="720" height="560" autoplay muted></video>
+      <div id="dodger" class="dodger" style="bottom: 180px; left: 180px;">🤪</div>
+    </div>
+
+
     <script defer src="../src/face-api.min.js"></script>
     <script defer src="../src/index.js"></script>
   </body>
