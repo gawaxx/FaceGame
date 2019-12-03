@@ -1,10 +1,11 @@
 var video = document.querySelector("#videoElement");
 window.addEventListener("click", () => {
-  console.log(event.clientY);
+  console.log(`${event.clientX},${event.clientY}`);
 });
 Promise.all([
-  faceapi.nets.tinyFaceDetector.loadFromUri("../src/models"),
-  faceapi.nets.faceLandmark68Net.loadFromUri("../src/models")
+  // faceapi.nets.tinyFaceDetector.loadFromUri("../src/models"),
+  faceapi.nets.faceLandmark68TinyNet.loadFromUri("../src/models")
+  // faceapi.nets.faceLandmark68Net.loadFromUri("../src/models")
 ]).then(start);
 
 function start() {
@@ -16,79 +17,51 @@ function start() {
 }
 
 video.addEventListener("play", () => {
-  const canvas = faceapi.createCanvasFromMedia(video);
-  document.body.append(canvas);
-  const displaySize = { width: video.width, height: video.height };
-  faceapi.matchDimensions(canvas, displaySize);
+  // const canvas = faceapi.createCanvasFromMedia(video);
+  // document.body.append(canvas);
+  // const displaySize = { width: video.width, height: video.height };
+  // faceapi.matchDimensions(canvas, displaySize);
   setInterval(async () => {
-    const detections = await faceapi
-      .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
-      .withFaceLandmarks();
-    const resizedDetections = faceapi.resizeResults(detections, displaySize);
-    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-    faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+    // const detections = await faceapi
+    //   .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
+    //   .withFaceLandmarks();
+    // const resizedDetections = faceapi.resizeResults(detections, displaySize);
+    // canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+    // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
 
-    const landmarks = await faceapi.detectFaceLandmarks(video);
+    const landmarks = await faceapi.detectFaceLandmarksTiny(video);
     const mouth = landmarks.getMouth();
-    // mouthCoordinates(mouth);
-    mouthIsOpen(mouth);
-    // console.log(mouthIsOpen(mouth));
-    // console.log(`X: ${mouth0._x}, Y: ${mouth0._y}`);
-  }, 1000);
+    let adj = mouthCoordinates(mouth);
+    mouthIsOpen(adj);
+  }, 500);
 });
 
 function mouthCoordinates(mouth) {
-  // let innerLip = mouth.slice(-8);
-  // innerLip.forEach(landmark =>
-  //   console.log(`X: ${landmark._x}, Y: ${landmark._y}`)
-  // );
-  console.log(mouth);
+  adjMouth = [];
+  mouth.forEach(landmark => {
+    x = landmark.x + (window.innerWidth - video.width) / 2;
+    y = landmark.y + (window.innerHeight - video.height) / 2;
+    adjMouth.push({ x, y });
+  });
+  return adjMouth;
 }
 
 function mouthIsOpen(mouth) {
-  console.log(mouth);
-  let outerLipTop = mouth[9].y;
-  let innerLipTop = mouth[18].y;
-  let innerLipBottom = mouth[14].y;
-  let outerLipBottom = mouth[3].y;
-  // console.log(`outerLipTop: ${outerLipTop}`);
-  // console.log(`innerLipTop: ${innerLipTop}`);
-  // console.log(`innerLipBottom: ${innerLipBottom}`);
-  // console.log(`outerLipBottom: ${outerLipBottom}`);
-  // console.log("---------------------------");
+  // let outerLipTop = mouth[9];
+  // let innerLipTop = mouth[18];
+  // let innerLipBottom = mouth[14];
+  // let outerLipBottom = mouth[3];
 
-  // let topLipHeight = outerLipTop - innerLipTop;
-  // let bottomLipHeight = innerLipBottom - outerLipBottom;
-  // let totalLipHeight = topLipHeight + bottomLipHeight;
+  const mouthHeight = faceapi.euclideanDistance(
+    [mouth[14].x, mouth[14].y],
+    [mouth[18].x, mouth[18].y]
+  );
+  const lipHeight = faceapi.euclideanDistance(
+    [mouth[9].x, mouth[9].y],
+    [mouth[3].x, mouth[3].y]
+  );
 
-  let lipHeight = outerLipTop - outerLipBottom;
-  let mouthHeight = innerLipTop - innerLipBottom;
-  // let lipSize = lipHeight - mouthHeight;
-  let mouthToLipRatio = mouthHeight / lipHeight; // produces % of height which is lip
-  let mouthOpen = mouthToLipRatio > 0.8;
-  // let mouthOpen = mouthHeight > totalLipHeight;
-  console.log(`lipHeight: ${lipHeight} // mouthHeight: ${mouthHeight}`);
-  console.log(`ratio: ${mouthToLipRatio} // mouthOpen: ${mouthOpen}`);
-  if (mouthOpen) {
-    return true;
-  } else {
-    return false;
-  }
+  let mouthOpen = mouthHeight > 50;
+  console.log(mouthOpen);
+  return mouthOpen;
 }
-
-// Example closed:
-// outerLipTop: 298.1619358062744
-// innerLipTop: 282.05471992492676
-// innerLipBottom: 236.75374031066895
-// outerLipBottom: 223.34667205810547
-// lipHeight: 75
-// mouthHeight: 46
-//
-//
-// Example open:
-// outerLipTop: 317.14799880981445
-// innerLipTop: 314.7025966644287
-// innerLipBottom: 238.69019508361816
-// outerLipBottom: 231.71459197998047
-// lipHeight: 86
-// mouthHeight: 76
