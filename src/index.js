@@ -65,5 +65,4 @@ let object = new MovingObject();
 setInterval(() => {
   objects.push(new MovingObject())
 }, 5000)
-setInterval( () => { objects.forEach(object => object.moveDodgerRight() )}, 300)
-
+setInterval( () => { objects.forEach(object => object.moveDodgerRight() )}, 300)}
