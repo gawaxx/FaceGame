@@ -18,10 +18,20 @@ canvas {
     position: absolute;
 }
 
+video {
+    /* All below is optional */
+    position: absolute; 
+    left: 25%;
+    top: 16%;
+}
+
 .dodger {
     /* background-color: black; */
+    padding-top: 200px;
     height: 60px;
     position: absolute;
     width: 60px;
     font-size: 60px;
   }
+
+  
