@@ -156,6 +156,7 @@ function mouthIsOpen(mouth, box) {
 
 
 class MovingObject {
+
   constructor(){
     let newDiv = document.createElement('div')
     this.element = newDiv
