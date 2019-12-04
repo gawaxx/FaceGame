@@ -29,6 +29,20 @@ const API = { getApi, patchApi, postApi };
 
 API.getApi(ApiURL).then(data => data.forEach(scoreboard => renderScore(scoreboard)))
 
+function renderScore(scoreboard) {
+    // debugger
+    let newTr = document.createElement('tr')
+    let newtdName = document.createElement('td')
+    newtdName.innerHTML = scoreboard.user_id
 
+    let newtdScore = document.createElement('td')
+    newtdScore.innerHTML = scoreboard.count
+
+    let newtdRank = document.createElement('td')
+    newtdRank.innerHTML = ""
+
+    newTr.append(newtdName, newtdScore, newtdRank)
+    table.append(newTr)
+}
 
 
