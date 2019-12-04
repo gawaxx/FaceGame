@@ -5,6 +5,7 @@ var mouthPoints = [];
 
 const body = document.querySelector('body')
 const mainContainer = document.querySelector('.container')
+const elems = document.body.getElementsByTagName("*");
 
 const getScoreBoard = document.querySelector('#scoreboard')
 let scoreBoard = 0;
@@ -152,6 +153,10 @@ function mouthIsOpen(mouth, box) {
   let mouthOpen = opening >= 50;
   console.log(`${opening}% open, ${mouthOpen}`);
   return mouthPoints;
+}
+
+function gameOver() {
+  element.all.remove()
 }
 
 // Moving object Class
