@@ -25,38 +25,52 @@ video {
     top: 16%; */
 }
 
-
 .scoreboard {
-    font-size: 40px;
-    left: 0px;
-    bottom: 80px;
-    background-color: white;
-    text-align: center;
+  font-size: 40px;
+  left: 0px;
+  bottom: 80px;
+  background-color: white;
+}
+
+.food {
+  padding-top: 200px;
+  height: 60px;
+  position: absolute;
+  width: 60px;
+  font-size: 60px;
+}
+
+.not-food {
+  padding-top: 200px;
+  height: 60px;
+  position: absolute;
+  width: 60px;
+  font-size: 60px;
 }
 
 .baguette {
-    /* background-color: black; */
-    padding-top: 200px;
-    height: 60px;
-    position: absolute;
-    width: 60px;
-    font-size: 60px;
+  /* background-color: black; */
+  padding-top: 200px;
+  height: 60px;
+  position: absolute;
+  width: 60px;
+  font-size: 60px;
 }
 
 .WineGlass {
-    /* background-color: black; */
-    padding-top: 200px;
-    height: 60px;
-    position: absolute;
-    width: 60px;
-    font-size: 60px;
+  /* background-color: black; */
+  padding-top: 200px;
+  height: 60px;
+  position: absolute;
+  width: 60px;
+  font-size: 60px;
 }
 
 .bomb {
-    /* background-color: black; */
-    padding-top: 200px;
-    height: 60px;
-    position: absolute;
-    width: 60px;
-    font-size: 60px;
+  /* background-color: black; */
+  padding-top: 200px;
+  height: 60px;
+  position: absolute;
+  width: 60px;
+  font-size: 60px;
 }
