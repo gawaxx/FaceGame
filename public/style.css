@@ -26,11 +26,13 @@ video {
 }
 
 .scoreboard {
+    width: 300px;
   position: absolute;
   font-size: 40px;
-  left: 50%;
+  left: 40%;
   bottom: 90%;
   background-color: white;
+  text-align: center;
 }
 
 .food {

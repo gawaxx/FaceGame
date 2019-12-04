@@ -167,7 +167,7 @@ function startGame() {
 
 function gameOver() {
   allElems.forEach(element => element.remove() )
-  getScoreBoard.style.fontSize = `${200}px`
+  // getScoreBoard.style.fontSize = `${200}px`
   getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
 }
 
@@ -246,13 +246,6 @@ class MovingObject {
           scoreBoard++;
           getScoreBoard.innerHTML = scoreBoard;
         }
-
-        // Post to API at the end of the game
-        // let postInfo = {
-        //   count: scoreBoard,
-        // }
-
-        // API.postApi(`$[ApiURL}`, postInfo)
       }
     };
     functionStuff(theBoxCoordinates);
