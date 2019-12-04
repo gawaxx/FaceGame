@@ -26,9 +26,10 @@ video {
 }
 
 .scoreboard {
+  position: absolute;
   font-size: 40px;
-  left: 0px;
-  bottom: 80px;
+  left: 50%;
+  bottom: 90%;
   background-color: white;
 }
 
