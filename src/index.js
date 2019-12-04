@@ -26,13 +26,13 @@ video.addEventListener("play", () => {
   const canvas = faceapi.createCanvasFromMedia(video);
   document.body.append(canvas);
   const displaySize = { width: video.width, height: video.height };
-  // const displaySize = { width: 720, height: 560 };
   faceapi.matchDimensions(canvas, displaySize);
 
   setInterval(async () => {
     const detections = await faceapi
       .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks();
+
     // const useTinyModel = true;
     // const detections = await faceapi
     //   .detectSingleFace(video)
@@ -70,11 +70,11 @@ function getMouthCoordinates(positions, box, rect) {
 }
 
 function mouthIsOpen(mouth, box) {
-  let outerLipTop = mouth[9].y;
-  let innerLipTop = mouth[18].y;
-  let innerLipBottom = mouth[14].y;
-  let outerLipBottom = mouth[3].y;
-  let headHeight = box.height;
+  // let outerLipTop = mouth[9].y;
+  // let innerLipTop = mouth[18].y;
+  // let innerLipBottom = mouth[14].y;
+  // let outerLipBottom = mouth[3].y;
+  // let headHeight = box.height;
 
   // const mouthHeight = faceapi.euclideanDistance(
   //   [mouth[14].x, mouth[14].y],
@@ -85,14 +85,39 @@ function mouthIsOpen(mouth, box) {
   //   [mouth[3].x, mouth[3].y]
   // );
   // debugger;
-
-  mouthHeight = innerLipTop - innerLipBottom;
-  lipHeight = outerLipTop - outerLipBottom;
-
-  let mouthOpen = mouthHeight > 20 && lipHeight > 30;
+  // console.log(`${parseInt((100 * mouthHeight) / box.height)}%`);
   // let mouthOpen = lipHeight > 0.13 * headHeight;
-  console.log(`${lipHeight},${mouthHeight}`);
-  console.log(`${mouthOpen}`);
+  // console.log(`${lipHeight},${mouthHeight}`);
+
+  // Get relevant y coordinates from mouthPoints
+  let outerLipTopRight = mouth[8].y;
+  let outerLipTopMid = mouth[9].y;
+  let outerLipTopLeft = mouth[10].y;
+  let innerLipTopRight = mouth[17].y;
+  let innerLipTopMid = mouth[18].y;
+  let innerLipTopLeft = mouth[19].y;
+  let innerLipBottomLeft = mouth[13].y;
+  let innerLipBottomMid = mouth[14].y;
+  let innerLipBottomRight = mouth[15].y;
+  let outerLipBottomLeft = mouth[2].y;
+  let outerLipBottomMid = mouth[3].y;
+  let outerLipBottomRight = mouth[4].y;
+
+  // Average out the lip heights and mouth heights
+  mouthHeightLeft = innerLipTopLeft - innerLipBottomLeft;
+  mouthHeightMid = innerLipTopMid - innerLipBottomMid;
+  mouthHeightRight = innerLipTopRight - innerLipBottomRight;
+  mouthHeightAvg = (mouthHeightLeft + mouthHeightMid + mouthHeightRight) / 3;
+
+  lipHeightLeft = outerLipTopLeft - outerLipBottomLeft;
+  lipHeightMid = outerLipTopMid - outerLipBottomMid;
+  lipHeightRight = outerLipTopRight - outerLipBottomRight;
+  lipHeightAvg = (lipHeightLeft + lipHeightMid + lipHeightRight) / 3;
+
+  // If our mouth measurements is 50% of lip measurement, mouth is open
+  opening = parseInt((100 * mouthHeightAvg) / lipHeightAvg);
+  let mouthOpen = opening >= 50;
+  console.log(`${opening}% open, ${mouthOpen}`);
   return mouthOpen;
 }
 
