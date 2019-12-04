@@ -27,7 +27,9 @@ const API = { getApi, patchApi, postApi };
 
 // Functions 
 
-API.getApi(ApiURL).then(data => data.forEach(scoreboard => renderScore(scoreboard)))
+document.addEventListener('DOMContentLoaded', function() {
+    API.getApi(ApiURL).then(data => data.forEach(scoreboard => renderScore(scoreboard)))
+})
 
 function renderScore(scoreboard) {
     // debugger
@@ -44,5 +46,7 @@ function renderScore(scoreboard) {
     newTr.append(newtdName, newtdScore, newtdRank)
     table.append(newTr)
 }
+
+
 
 
