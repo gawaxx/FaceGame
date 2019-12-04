@@ -9,7 +9,7 @@ const mainContainer = document.querySelector('.container')
 const getScoreBoard = document.querySelector('#scoreboard')
 let scoreBoard = 0;
 
-const ApiURL = "http://localhost:3000/scoreboard"; 
+const ApiURL = "http://localhost:3000/score_boards"; 
 
 // API Stuff 
 
@@ -20,8 +20,9 @@ const headers = {
 
 const getApi = url => fetch(url).then(resp => resp.json() )
 const patchApi = (url, patchInfo) => fetch(url, { method: "PATCH", headers: headers, body: JSON.stringify(patchInfo) } ).then(resp => resp.json() )
+const postApi = (url, postInfo) => fetch(url, { method: "PATCH", headers: headers, body: JSON.stringify(postInfo) } ).then(resp => resp.json() )
 
-const API = { getApi, patchApi }
+const API = { getApi, patchApi, postApi }
 
 // Code
 
@@ -169,12 +170,22 @@ class MovingObject {
         rect1.x + rect1.width > rect2.x &&
         rect1.y < rect2.y + rect2.height &&
         rect1.y + rect1.height > rect2.y) {
+        // API.getApi(ApiURL).then(data => data.forEach( scoreboard => function(scoreboard){
+        //   scoreBoard = scoreboard.count
+        // }))
 
         console.log("Collision")
         this.element.remove();
         scoreBoard++;
         getScoreBoard.innerHTML = scoreBoard;
-        API.getApi
+
+
+        // Post to API at the end of the game
+        // let postInfo = {
+        //   count: scoreBoard,
+        // }
+
+        // API.postApi(`$[ApiURL}`, postInfo)
       }
     }
 
