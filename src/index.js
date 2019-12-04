@@ -54,7 +54,9 @@ video.addEventListener("play", () => {
 
   startBaguetteThrow()
 
-  setTimeout( startWineGlassThrow(), 20000 )
+  setTimeout( startWineGlassThrow(), 30000 )
+
+  setTimeout( startBombThrow(), 1000)
 
 });
 
@@ -117,6 +119,21 @@ class MovingObject {
     else if (y >= 0) { this.element.style.bottom = `${y + 20}px`; this.y = y + 20 }
   }
 
+  moveDodgerSideWays(){
+    let xPosition = this.element.style.left.replace("px", "");
+    let x = parseInt(xPosition, 10)
+    let yPosition = this.element.style.bottom.replace("px", "");
+    let y = parseInt(yPosition, 10)
+
+    if (y > 1200) {this.element.remove()}
+    if (x > 1500) {this.element.remove()}
+
+    else if (x >= 0) { this.element.style.left = `${x + 20}px`; this.x = x + 20 }
+    else if (y >= 0) { this.element.style.bottom = `${y + 20}px`; this.y = y + 20 }
+
+
+  }
+
   isCollide() {
     let xPosition = parseInt(this.element.style.left.replace("px", ""),10);
     let yPosition = window.innerHeight - parseInt(this.element.style.bottom.replace("px", ""),10);
@@ -141,6 +158,8 @@ class MovingObject {
   }
 }
 
+// Definition of objects
+
 class Baguette extends MovingObject {
   constructor(){
     super()
@@ -161,10 +180,20 @@ class WineGlass extends MovingObject{
   }
 }
 
+class Bomb extends MovingObject{
+  constructor(){
+    super()
+    this.element.className = "bomb"
+    this.element.innerHTML = "💣"
+    this.element.style.left = `${0}px`
+    this.element.style.bottom = `${0}px`
+  }
+}
+  
 
 
 
-
+// Objects being thrown
 
 const baguettes = []
 
@@ -188,5 +217,15 @@ function startWineGlassThrow(){
 
 }
 
+const bombs = []
+
+function startBombThrow(){
+
+  setInterval(() => { bombs.push(new Bomb( )) }, 15000)
+
+  setInterval( () => { bombs.forEach(object => object.moveDodgerSideWays() )} , 100)
+  setInterval( () => { bombs.forEach(object => object.isCollide()) }, 10 )
+
+}
 
 
