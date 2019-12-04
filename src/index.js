@@ -136,13 +136,16 @@ class MovingObject {
 class Baguette extends MovingObject {
   constructor(){
     super()
-    // let newDiv = document.createElement('div')
-    // body.append(newDiv)
-    // this.element = newDiv
-    // this.element.style.left = `${500}px`
-    // this.element.style.bottom = `${300}px`
-    this.element.className = "dodger"
+    this.element.className = "baguette"
     this.element.innerHTML = "🥖"
+  }
+}
+
+class WineGlass extends MovingObject{
+  constructor(){
+    super()
+    this.element.className = "WineGlass"
+    this.element.innerHTML = "🍷"
   }
 }
 
