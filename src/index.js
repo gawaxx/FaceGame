@@ -128,8 +128,7 @@ class MovingObject {
     if (y > 1200) {this.element.remove()}
     if (x > 1500) {this.element.remove()}
 
-    else if (x >= 0) { this.element.style.left = `${x + 20}px`; this.x = x + 20 }
-    else if (y >= 0) { this.element.style.bottom = `${y + 20}px`; this.y = y + 20 }
+    else if (x >= 0) { this.element.style.left = `${x + 20}px`; this.x = x + 20; this.element.style.bottom = `${y - 20}px`; this.y = y - 20 }
 
 
   }
@@ -186,7 +185,7 @@ class Bomb extends MovingObject{
     this.element.className = "bomb"
     this.element.innerHTML = "💣"
     this.element.style.left = `${0}px`
-    this.element.style.bottom = `${0}px`
+    this.element.style.bottom = `${800}px`
   }
 }
   
