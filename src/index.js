@@ -9,6 +9,8 @@ const mainContainer = document.querySelector('.container')
 const getScoreBoard = document.querySelector('#scoreboard')
 let scoreBoard = 0;
 
+const ApiURL = "http://localhost:3000/scoreboard"; 
+
 // API Stuff 
 
 const headers = {
@@ -172,6 +174,7 @@ class MovingObject {
         this.element.remove();
         scoreBoard++;
         getScoreBoard.innerHTML = scoreBoard;
+        API.getApi
       }
     }
 

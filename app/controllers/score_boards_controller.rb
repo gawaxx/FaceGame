@@ -1,7 +1,8 @@
 class ScoreBoardsController < ApplicationController
 
     def index
-        @scoreboards = ScoreBoad.all
+        scoreboards = ScoreBoard.all
+        render json: ScoreBoard.new(scoreboards)
     end 
-    
+
 end

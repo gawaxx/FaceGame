@@ -21,6 +21,7 @@ canvas {
 video {
     /* All below is optional */
     position: flex; 
+    transform: rotateY(180deg);
 }
 
 .scoreboard {
