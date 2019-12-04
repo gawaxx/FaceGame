@@ -1,7 +1,6 @@
 // Variables 
 const allElems = []
 let isGameOver = false;
-let timeouts = [];
 let intervals = [];
 
 
@@ -162,7 +161,9 @@ function startGame() {
       piece.collisionCheck();
     });
   }, 20);
-  const intervals = [foodGenerator, notFoodGenerator, pieceUpdater];
+  intervals.push(foodGenerator)
+  intervals.push(notFoodGenerator)
+  intervals.push(pieceUpdater)
 }
 
 // function gameOver() {
@@ -171,29 +172,26 @@ function startGame() {
 //   getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
 // }
 
-var gameOver = (function() {
-  var executed = false;
+let gameOver = (function() {
+  let executed = false;
   return function() {
       if (!executed) {
           executed = true;
+
+          intervals.forEach(interval => clearInterval(interval))
           
           window.alert("Game Over loser ! 👎");
-          window.addEventListener('click', event => function(event){
 
-            debugger
+          allElems.forEach(element => element.remove() )
+          getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
 
-            event.preventDefault()
 
-            allElems.forEach(element => element.remove() )
-            getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
+          let postInfo = {
+            count: scoreBoard,
+            user_id: 3
+          }
 
-            let postInfo = {
-              count: scoreBoard,
-              user_id: 3
-            }
-
-            API.postApi(ApiURL, postInfo)
-          })
+          API.postApi(ApiURL, postInfo)
       }
   };
 })();
