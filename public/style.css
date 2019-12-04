@@ -21,6 +21,14 @@ canvas {
 video {
     /* All below is optional */
     position: flex; 
+    /* transform: rotateY(180deg); */
+}
+
+.scoreboard {
+    font-size: 40px;
+    left: 0px;
+    bottom: 80px;
+    background-color: white;
 }
 
 .baguette {
@@ -31,7 +39,6 @@ video {
     width: 60px;
     font-size: 60px;
 }
-
 
 .WineGlass {
     /* background-color: black; */
@@ -50,6 +57,3 @@ video {
     width: 60px;
     font-size: 60px;
 }
-
-
-  

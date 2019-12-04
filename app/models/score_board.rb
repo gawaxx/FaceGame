@@ -1,0 +1,2 @@
+class ScoreBoard < ApplicationRecord
+end
