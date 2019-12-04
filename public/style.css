@@ -78,23 +78,39 @@ video {
   font-size: 60px;
 }
 
+/* Top Style  */
+
 .top {
     border-style: solid;
     border-color: white;
     text-align: center;
-    position: relative;
+    position: absolute;
     padding-bottom: 45%;
+    max-height: 10vh;
 }
 
 .top h1 {
     color: white;
+    font-size: 45px;
 }
 
+.top p {
+    color: white;
+    font-size: 20px;
+}
+
+/* Table Style */
+
 .table {
+    position: absolute;
     border-style: solid;
     border-color: white;
 }
 
 .table p {
+    color: white;
+}
+
+.table table {
     color: white;
 }
