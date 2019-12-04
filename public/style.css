@@ -20,18 +20,36 @@ canvas {
 
 video {
     /* All below is optional */
-    position: absolute; 
-    left: 25%;
-    top: 16%;
+    position: flex; 
 }
 
-.dodger {
+.baguette {
     /* background-color: black; */
     padding-top: 200px;
     height: 60px;
     position: absolute;
     width: 60px;
     font-size: 60px;
-  }
+}
+
+
+.WineGlass {
+    /* background-color: black; */
+    padding-top: 200px;
+    height: 60px;
+    position: absolute;
+    width: 60px;
+    font-size: 60px;
+}
+
+.bomb {
+    /* background-color: black; */
+    padding-top: 200px;
+    height: 60px;
+    position: absolute;
+    width: 60px;
+    font-size: 60px;
+}
+
 
   
