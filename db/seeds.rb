@@ -6,4 +6,16 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-scoreboard1 = ScoreBoard.create(count: 0)
+ScoreBoard.destroy_all
+puts "Cleaned all scoreboards"
+
+
+User.destroy_all
+puts "Cleaned all users"
+
+
+user1 = User.create(name: "Bob")
+puts "Created one user"
+
+scoreboard1 = ScoreBoard.create(count: 0, user_id: 3)
+puts "Created one scoreboard"
