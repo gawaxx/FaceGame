@@ -1,11 +1,15 @@
 // Variables 
+const allElems = []
+let isGameOver = false;
+let timeouts = [];
+let intervals = [];
 
 var video = document.querySelector("#videoElement");
+allElems.push(video)
 var mouthPoints = [];
 
 const body = document.querySelector('body')
 const mainContainer = document.querySelector('.container')
-const elems = document.body.getElementsByTagName("*");
 
 const getScoreBoard = document.querySelector('#scoreboard')
 let scoreBoard = 0;
@@ -79,9 +83,9 @@ video.addEventListener("play", () => {
     mouthIsOpen(mouthPoints, box);
     boxCoordinates(box, rect)
   }, 500);
-  startBaguetteThrow()
-  setTimeout( startWineGlassThrow(), 30000 )
-  setTimeout( startBombThrow(), 1000)
+  timeouts.push(setTimeout( startBaguetteThrow()))
+  timeouts.push(setTimeout( startWineGlassThrow(), 30000 ))
+  timeouts.push(setTimeout( startBombThrow(), 1000))
 });
 
 function boxCoordinates(box, rect) {
@@ -101,7 +105,6 @@ function getMouthCoordinates(positions, box, rect) {
   });
   return mouthPoints;
 }
-
 
 function mouthIsOpen(mouth, box) {
   // let outerLipTop = mouth[9].y;
@@ -155,8 +158,11 @@ function mouthIsOpen(mouth, box) {
   return mouthPoints;
 }
 
+
 function gameOver() {
-  element.all.remove()
+  allElems.forEach(element => element.remove() )
+  getScoreBoard.style.fontSize = `${200}px`
+  getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
 }
 
 // Moving object Class
@@ -218,6 +224,7 @@ class MovingObject {
         // }))
 
         if (this.element.className === "bomb"){
+          isGameOver = true;
           gameOver()
         }
 
@@ -284,10 +291,10 @@ const baguettes = []
 
 function startBaguetteThrow(){
 
-  setInterval(() => { baguettes.push(new Baguette( )) }, 5000)
-
-  setInterval( () => { baguettes.forEach(object => object.moveDodgerRight() )} , 300)
-  setInterval( () => { baguettes.forEach(object => object.isCollide()) }, 10 )
+  let createBa = setInterval(() => { baguettes.push(new Baguette( )) }, 5000)
+  
+  let moveBa = setInterval( () => { baguettes.forEach(object => object.moveDodgerRight() )} , 300)
+  let detectionBa = setInterval( () => { baguettes.forEach(object => object.isCollide()) }, 10 )
 
 }
 
