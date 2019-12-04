@@ -53,7 +53,8 @@ video.addEventListener("play", () => {
   }, 500);
 
   startBaguetteThrow()
-  startWineGlassThrow()
+
+  setTimeout( startWineGlassThrow(), 20000 )
 
 });
 
@@ -155,10 +156,12 @@ class WineGlass extends MovingObject{
     super()
     this.element.className = "WineGlass"
     this.element.innerHTML = "🍷"
-    this.element.style.left = `${300}px`
+    this.element.style.left = `${400}px`
     this.element.style.bottom = `${0}px`
   }
 }
+
+
 
 
 
