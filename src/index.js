@@ -1,13 +1,32 @@
+// Variables 
+
 var video = document.querySelector("#videoElement");
 var mouthPoints = [];
+
 const body = document.querySelector('body')
-const scoreBoard = 0;
+const mainContainer = document.querySelector('.container')
+
+const getScoreBoard = document.querySelector('#scoreboard')
+let scoreBoard = 0;
+
+// API Stuff 
+
+const headers = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+}
+
+const getApi = url => fetch(url).then(resp => resp.json() )
+const patchApi = (url, patchInfo) => fetch(url, { method: "PATCH", headers: headers, body: JSON.stringify(patchInfo) } ).then(resp => resp.json() )
+
+const API = { getApi, patchApi }
+
+// Code
 
 window.addEventListener("click", () => {
   console.log(`${event.clientX},${event.clientY}`);
 });
 
-const mainContainer = document.querySelector('.container')
 
 Promise.all([
   faceapi.nets.faceLandmark68TinyNet.loadFromUri("../src/models"),
@@ -152,6 +171,7 @@ class MovingObject {
         console.log("Collision")
         this.element.remove();
         scoreBoard++;
+        getScoreBoard.innerHTML = scoreBoard;
       }
     }
 

@@ -23,6 +23,12 @@ video {
     position: flex; 
 }
 
+.scoreboard {
+    font-size: 40px;
+    left: 0px;
+    background-color: white;
+}
+
 .baguette {
     /* background-color: black; */
     padding-top: 200px;
@@ -31,7 +37,6 @@ video {
     width: 60px;
     font-size: 60px;
 }
-
 
 .WineGlass {
     /* background-color: black; */
@@ -50,6 +55,3 @@ video {
     width: 60px;
     font-size: 60px;
 }
-
-
-  
