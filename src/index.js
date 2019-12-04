@@ -154,6 +154,8 @@ function mouthIsOpen(mouth, box) {
   return mouthPoints;
 }
 
+// Moving object Class
+
 
 class MovingObject {
 
@@ -210,10 +212,16 @@ class MovingObject {
         //   scoreBoard = scoreboard.count
         // }))
 
-        console.log("Collision")
-        this.element.remove();
-        scoreBoard++;
-        getScoreBoard.innerHTML = scoreBoard;
+        if (this.element.className === "bomb"){
+          gameOver()
+        }
+
+        else {
+          console.log("Collision")
+          this.element.remove();
+          scoreBoard++;
+          getScoreBoard.innerHTML = scoreBoard;
+        }
 
 
         // Post to API at the end of the game
