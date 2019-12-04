@@ -95,8 +95,8 @@ video.addEventListener("play", () => {
 function getMouthCoordinates(positions, box, rect) {
   mouthPoints = [];
   positions.forEach(point => {
-    x = parseInt(rect.x + box.x + point.x * box.width);
-    y = parseInt(rect.y + box.y + point.y * box.height);
+    x = parseInt(rect.x + box.x + point.x * box.width) + 50;
+    y = parseInt(rect.y + box.y + point.y * box.height) + 50;
     mouthPoints.push({ x, y });
   });
   return mouthPoints;
@@ -233,6 +233,7 @@ class MovingObject {
       width: 60,
       height: 60
     };
+    console.log(mouthHitBox);
 
     if (
       pieceHitbox.x < mouthHitBox.x + mouthHitBox.width &&
