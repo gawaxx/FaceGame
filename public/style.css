@@ -1,28 +1,30 @@
 .container {
-    height: 80vh;
-    width: 80vw;
+  height: 80vh;
+  width: 80vw;
 }
 
 body {
-        margin: 0;
-        padding: 0;
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: black;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
 }
 
 canvas {
-    position: absolute;
+  position: absolute;
 }
 
 video {
-    /* All below is optional */
-    position: flex; 
-    /* transform: rotateY(180deg); */
+  /* All below is optional */
+  position: absolute;
+  /* left: 25%;
+    top: 16%; */
 }
+
 
 .scoreboard {
     font-size: 40px;
