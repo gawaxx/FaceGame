@@ -78,21 +78,19 @@ video.addEventListener("play", () => {
     mouthRelativePositions = landmarks.relativePositions.slice(-20);
 
     getMouthCoordinates(mouthRelativePositions, box, rect);
-    mouthIsOpen(mouthPoints, box);
-    boxCoordinates(box, rect);
-  }, 500);
+    // mouthIsOpen();
+    // boxCoordinates(box, rect);
+  }, 200);
   startGame();
-  // setTimeout(startWineGlassThrow(), 30000);
-  // setTimeout(startBombThrow(), 1000);
 });
 
-function boxCoordinates(box, rect) {
-  theBoxCoordinates = [];
-  x = box.x + 0.5 * box.width + rect.x;
-  y = box.y + 0.5 * box.height + rect.y + 100;
+// function boxCoordinates(box, rect) {
+//   theBoxCoordinates = [];
+//   x = box.x + 0.5 * box.width + rect.x;
+//   y = box.y + 0.5 * box.height + rect.y + 100;
 
-  return (theBoxCoordinates = { x: x, y: y });
-}
+//   return (theBoxCoordinates = { x: x, y: y });
+// }
 
 function getMouthCoordinates(positions, box, rect) {
   mouthPoints = [];
@@ -104,8 +102,9 @@ function getMouthCoordinates(positions, box, rect) {
   return mouthPoints;
 }
 
-function mouthIsOpen(mouth, box) {
-  // Define 12 mouth points
+function mouthIsOpen() {
+  let mouth = mouthPoints;
+  // Get relevant y coordinates from mouthPoints
   let outerLipTopRight = mouth[8].y;
   let outerLipTopMid = mouth[9].y;
   let outerLipTopLeft = mouth[10].y;
@@ -119,21 +118,30 @@ function mouthIsOpen(mouth, box) {
   let outerLipBottomMid = mouth[3].y;
   let outerLipBottomRight = mouth[4].y;
 
-  // Average out the lip heights and mouth heights from mouth points
+  // Average out the lip heights and mouth heights
   mouthHeightLeft = innerLipTopLeft - innerLipBottomLeft;
   mouthHeightMid = innerLipTopMid - innerLipBottomMid;
   mouthHeightRight = innerLipTopRight - innerLipBottomRight;
   mouthHeightAvg = (mouthHeightLeft + mouthHeightMid + mouthHeightRight) / 3;
+
   lipHeightLeft = outerLipTopLeft - outerLipBottomLeft;
   lipHeightMid = outerLipTopMid - outerLipBottomMid;
   lipHeightRight = outerLipTopRight - outerLipBottomRight;
   lipHeightAvg = (lipHeightLeft + lipHeightMid + lipHeightRight) / 3;
 
+  // For object detection, we need a mouth middle point.
+  let mouthMiddle = {
+    x: mouth[14].x,
+    y: parseInt((mouth[14].y + mouth[18].y) / 2)
+  };
+  mouthPoints.push(mouthMiddle);
+
   // If our mouth measurements is 50% of lip measurement, mouth is open
   opening = parseInt((100 * mouthHeightAvg) / lipHeightAvg);
   let mouthOpen = opening >= 50;
-  console.log(`${opening}% open, ${mouthOpen}`);
-  return mouthPoints;
+  // console.log(`${opening}% open, ${mouthOpen}`);
+  // console.log(`${mouthMiddle.x}, ${mouthMiddle.y}`);
+  return mouthOpen;
 }
 
 function startGame() {
@@ -144,7 +152,7 @@ function startGame() {
 
   const notFoodGenerator = setInterval(() => {
     pieces.push(new NotFood());
-  }, 10000);
+  }, 20000);
 
   const pieceUpdater = setInterval(() => {
     pieces.forEach(piece => {
@@ -159,8 +167,8 @@ class MovingObject {
   constructor() {
     // Give it a random starting position, 'fenced' at 50px window border
     this.position = {
-      x: parseInt(50 + Math.random() * (window.innerWidth - 50)),
-      y: parseInt(50 + Math.random() * (window.innerHeight - 50))
+      x: parseInt(100 + Math.random() * (window.innerWidth - 100)),
+      y: parseInt(100 + Math.random() * (window.innerHeight - 100))
     };
 
     // Give it a random starting velocity
@@ -184,9 +192,9 @@ class MovingObject {
 
   updatePosition() {
     let bounceX =
-      this.position.x <= 50 || this.position.x >= window.innerWidth - 50;
+      this.position.x <= 50 || this.position.x >= window.innerWidth - 60;
     let bounceY =
-      this.position.y <= 50 || this.position.y >= window.innerHeight - 50;
+      this.position.y <= 50 || this.position.y >= window.innerHeight - 60;
     if (bounceX) this.velocity.x *= -1;
     if (bounceY) this.velocity.y *= -1;
 
@@ -197,42 +205,94 @@ class MovingObject {
     this.element.style.bottom = `${this.position.y}px`;
   }
 
+  // collisionHandler() {
+  //   console.log("Collision");
+  //   this.element.remove();
+  //   scoreBoard++;
+  //   getScoreBoard.innerHTML = scoreBoard;
+  //   pieceHitbox = { x: 0, y: 0, width: 0, height: 0 };
+  //   return scoreBoard;
+  //   debugger;
+  // }
+
   collisionCheck() {
-    let xPosition = parseInt(this.element.style.left.replace("px", ""), 10);
-    let yPosition =
-      window.innerHeight -
-      parseInt(this.element.style.bottom.replace("px", ""), 10);
+    // let xPosition = parseInt(this.element.style.left.replace("px", ""), 10);
+    // let yPosition =
+    //   window.innerHeight -
+    //   parseInt(this.element.style.bottom.replace("px", ""), 10);
+    let pieceHitbox = {
+      x: this.position.x,
+      y: this.position.y,
+      width: 60,
+      height: 60
+    };
 
-    let functionStuff = point => {
-      let rect1 = { x: xPosition, y: yPosition, width: 60, height: 60 };
-      let rect2 = { x: point.x, y: point.y, width: 60, height: 60 };
+    let mouthHitBox = {
+      x: mouthPoints[3].x,
+      y: mouthPoints[3].y,
+      width: 60,
+      height: 60
+    };
 
-      if (
-        rect1.x < rect2.x + rect2.width &&
-        rect1.x + rect1.width > rect2.x &&
-        rect1.y < rect2.y + rect2.height &&
-        rect1.y + rect1.height > rect2.y
-      ) {
-        // API.getApi(ApiURL).then(data => data.forEach( scoreboard => function(scoreboard){
-        //   scoreBoard = scoreboard.count
-        // }))
-
-        console.log("Collision");
+    if (
+      pieceHitbox.x < mouthHitBox.x + mouthHitBox.width &&
+      pieceHitbox.x + pieceHitbox.width > mouthHitBox.x &&
+      pieceHitbox.y < mouthHitBox.y + mouthHitBox.height &&
+      pieceHitbox.y + pieceHitbox.height > mouthHitBox.y &&
+      mouthIsOpen()
+    ) {
+      // collisionHandler();
+      console.log("Collision");
+      // this.element.remove();
+      // scoreBoard++;
+      // getScoreBoard.innerHTML = scoreBoard;
+      // pieceHitbox = { x: 0, y: 0, width: 0, height: 0 };
+      // return scoreBoard;
+      // debugger;
+      if (this.element.className === "not-food") {
+        // GAME OVER
+        console.log("GAME OVER");
+        this.element.remove();
+      } else {
+        console.log("GNOM NOM NOM");
         this.element.remove();
         scoreBoard++;
         getScoreBoard.innerHTML = scoreBoard;
-
-        // Post to API at the end of the game
-        // let postInfo = {
-        //   count: scoreBoard,
-        // }
-
-        // API.postApi(`$[ApiURL}`, postInfo)
       }
-    };
-    functionStuff(theBoxCoordinates);
+    }
   }
 }
+
+// let functionStuff = point => {
+//   let pieceHitbox = { x: xPosition, y: yPosition, width: 60, height: 60 };
+//   let mouthHitBox = { x: point.x, y: point.y, width: 60, height: 60 };
+
+//   if (
+//     pieceHitbox.x < mouthHitBox.x + mouthHitBox.width &&
+//     pieceHitbox.x + pieceHitbox.width > mouthHitBox.x &&
+//     pieceHitbox.y < mouthHitBox.y + mouthHitBox.height &&
+//     pieceHitbox.y + pieceHitbox.height > mouthHitBox.y
+//   ) {
+// API.getApi(ApiURL).then(data => data.forEach( scoreboard => function(scoreboard){
+//   scoreBoard = scoreboard.count
+// }))
+
+// console.log("Collision");
+// this.element.remove();
+// scoreBoard++;
+// getScoreBoard.innerHTML = scoreBoard;
+
+// Post to API at the end of the game
+// let postInfo = {
+//   count: scoreBoard,
+// }
+
+//         // API.postApi(`$[ApiURL}`, postInfo)
+//       }
+//     };
+//     // functionStuff(theBoxCoordinates);
+//   }
+// }
 
 // Definition of objects
 
