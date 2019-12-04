@@ -383,86 +383,21 @@ class NotFood extends MovingObject {
   }
 }
 
-// class Baguette extends MovingObject {
-//   constructor() {
-//     super();
-//     this.element.className = "baguette";
-//     this.element.innerHTML = "🥖";
-//     // this.element.style.left = `${0}px`;
-//     // this.element.style.bottom = `${300}px`;
-//   }
-// }
-
-// class WineGlass extends MovingObject {
-//   constructor() {
-//     super();
-//     this.element.className = "WineGlass";
-//     this.element.innerHTML = "🍷";
-//     this.element.style.left = `${400}px`;
-//     this.element.style.bottom = `${0}px`;
-//   }
-// }
-
-// class Bomb extends MovingObject {
-//   constructor() {
-//     super();
-//     this.element.className = "bomb";
-//     this.element.innerHTML = "💣";
-//     this.element.style.left = `${0}px`;
-//     this.element.style.bottom = `${800}px`;
-//   }
-// }
-
-// Objects being thrown
-
 function startGame() {
   const pieces = [];
-
-  setInterval(() => {
+  const foodGenerator = setInterval(() => {
     pieces.push(new Food());
   }, 5000);
 
-  setInterval(() => {
+  const notFoodGenerator = setInterval(() => {
     pieces.push(new NotFood());
   }, 10000);
 
-  setInterval(() => {
+  const pieceUpdater = setInterval(() => {
     pieces.forEach(piece => {
       piece.updatePosition();
       piece.collisionCheck();
     });
   }, 20);
-  // setInterval(() => {
-  //   baguettes.forEach(object => object.isCollide());
-  // }, 10);
+  const intervals = [foodGenerator, notFoodGenerator, pieceUpdater];
 }
-
-// const wineglasses = [];
-
-// function startWineGlassThrow() {
-//   setInterval(() => {
-//     wineglasses.push(new WineGlass());
-//   }, 8000);
-
-//   setInterval(() => {
-//     wineglasses.forEach(object => object.moveDodgerDown());
-//   }, 200);
-//   setInterval(() => {
-//     wineglasses.forEach(object => object.isCollide());
-//   }, 10);
-// }
-
-// const bombs = [];
-
-// function startBombThrow() {
-//   setInterval(() => {
-//     bombs.push(new Bomb());
-//   }, 15000);
-
-//   setInterval(() => {
-//     bombs.forEach(object => object.moveDodgerSideWays());
-//   }, 100);
-//   setInterval(() => {
-//     bombs.forEach(object => object.isCollide());
-//   }, 10);
-// }
