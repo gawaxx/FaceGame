@@ -7,14 +7,15 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 ScoreBoard.destroy_all
-put "Cleaned all scoreboards"
+puts "Cleaned all scoreboards"
+
 
 User.destroy_all
-put "Cleaned all users"
+puts "Cleaned all users"
 
-scoreboard1 = ScoreBoard.create(count: 0, user_id: 1)
-put "Created one scoreboard"
 
 user1 = User.create(name: "Bob")
-put "Created one user"
+puts "Created one user"
 
+scoreboard1 = ScoreBoard.create(count: 0, user_id: 3)
+puts "Created one scoreboard"
