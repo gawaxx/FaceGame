@@ -165,11 +165,28 @@ function startGame() {
   const intervals = [foodGenerator, notFoodGenerator, pieceUpdater];
 }
 
-function gameOver() {
-  allElems.forEach(element => element.remove() )
-  // getScoreBoard.style.fontSize = `${200}px`
-  getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
-}
+// function gameOver() {
+//   debugger
+//   allElems.forEach(element => element.remove() )
+//   getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
+// }
+
+var gameOver = (function() {
+  var executed = false;
+  return function() {
+      if (!executed) {
+          executed = true;
+          allElems.forEach(element => element.remove() )
+          getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
+          window.alert("Game Over loser ! 👎");
+          let postInfo = {
+            count: scoreBoard,
+            user_id: 3
+          }
+          API.postApi(ApiURL, postInfo)
+      }
+  };
+})();
 
 // Moving object Class
 
