@@ -77,3 +77,24 @@ video {
   width: 60px;
   font-size: 60px;
 }
+
+.top {
+    border-style: solid;
+    border-color: white;
+    text-align: center;
+    position: relative;
+    padding-bottom: 45%;
+}
+
+.top h1 {
+    color: white;
+}
+
+.table {
+    border-style: solid;
+    border-color: white;
+}
+
+.table p {
+    color: white;
+}
