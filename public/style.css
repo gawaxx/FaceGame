@@ -21,12 +21,13 @@ canvas {
 video {
     /* All below is optional */
     position: flex; 
-    transform: rotateY(180deg);
+    /* transform: rotateY(180deg); */
 }
 
 .scoreboard {
     font-size: 40px;
     left: 0px;
+    bottom: 80px;
     background-color: white;
 }
 
