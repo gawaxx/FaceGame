@@ -81,9 +81,9 @@ video.addEventListener("play", () => {
     mouthIsOpen(mouthPoints, box);
     boxCoordinates(box, rect);
   }, 500);
-  startBaguetteThrow();
-  setTimeout(startWineGlassThrow(), 30000);
-  setTimeout(startBombThrow(), 1000);
+  startGame();
+  // setTimeout(startWineGlassThrow(), 30000);
+  // setTimeout(startBombThrow(), 1000);
 });
 
 function boxCoordinates(box, rect) {
@@ -198,49 +198,7 @@ class MovingObject {
     this.element.style.bottom = `${this.position.y}px`;
   }
 
-  // moveDodgerRight() {
-  //   let xPosition = this.element.style.left.replace("px", "");
-  //   let x = parseInt(xPosition, 10);
-  //   if (x > 1500) {
-  //     this.element.remove();
-  //   } else if (x >= 0) {
-  //     this.element.style.left = `${x + 20}px`;
-  //     this.x = x + 20;
-  //   }
-  // }
-
-  // moveDodgerDown() {
-  //   let yPosition = this.element.style.bottom.replace("px", "");
-  //   let y = parseInt(yPosition, 10);
-
-  //   if (y > 1200) {
-  //     this.element.remove();
-  //   } else if (y >= 0) {
-  //     this.element.style.bottom = `${y + 20}px`;
-  //     this.y = y + 20;
-  //   }
-  // }
-
-  // moveDodgerSideWays() {
-  //   let xPosition = this.element.style.left.replace("px", "");
-  //   let x = parseInt(xPosition, 10);
-  //   let yPosition = this.element.style.bottom.replace("px", "");
-  //   let y = parseInt(yPosition, 10);
-
-  //   if (y > 1200) {
-  //     this.element.remove();
-  //   }
-  //   if (x > 1500) {
-  //     this.element.remove();
-  //   } else if (x >= 0) {
-  //     this.element.style.left = `${x + 20}px`;
-  //     this.x = x + 20;
-  //     this.element.style.bottom = `${y - 20}px`;
-  //     this.y = y - 20;
-  //   }
-  // }
-
-  isCollide() {
+  collisionCheck() {
     let xPosition = parseInt(this.element.style.left.replace("px", ""), 10);
     let yPosition =
       window.innerHeight -
@@ -279,51 +237,204 @@ class MovingObject {
 
 // Definition of objects
 
-class Baguette extends MovingObject {
+class Food extends MovingObject {
   constructor() {
     super();
-    this.element.className = "baguette";
-    this.element.innerHTML = "🥖";
-    // this.element.style.left = `${0}px`;
-    // this.element.style.bottom = `${300}px`;
+    const food = [
+      "🍏",
+      "🍎",
+      "🍐",
+      "🍊",
+      "🍋",
+      "🍌",
+      "🍉",
+      "🍇",
+      "🍓",
+      "🍈",
+      "🍒",
+      "🍑",
+      "🍍",
+      "🥭",
+      "🥥",
+      "🥝",
+      "🍅",
+      "🍆",
+      "🥑",
+      "🥦",
+      "🥒",
+      "🥬",
+      "🌶",
+      "🌽",
+      "🥕",
+      "🥔",
+      "🍠",
+      "🥐",
+      "🍞",
+      "🥖",
+      "🥨",
+      "🥯",
+      "🧀",
+      "🥚",
+      "🍳",
+      "🥞",
+      "🥓",
+      "🥩",
+      "🍗",
+      "🍖",
+      "🌭",
+      "🍔",
+      "🍟",
+      "🍕",
+      "🥪",
+      "🥙",
+      "🌮",
+      "🌯",
+      "🥗",
+      "🥘",
+      "🥫",
+      "🍝",
+      "🍜",
+      "🍲",
+      "🍛",
+      "🍣",
+      "🍱",
+      "🥟",
+      "🍤",
+      "🍙",
+      "🍚",
+      "🍘",
+      "🍥",
+      "🥮",
+      "🥠",
+      "🍢",
+      "🍡",
+      "🍧",
+      "🍨",
+      "🍦",
+      "🥧",
+      "🍰",
+      "🎂",
+      "🍮",
+      "🍭",
+      "🍬",
+      "🍫",
+      "🍿",
+      "🍩",
+      "🍪",
+      "🌰",
+      "🥜",
+      "🍯",
+      "🍺",
+      "🍻",
+      "🥂",
+      "🍷",
+      "🥃",
+      "🍸",
+      "🍹",
+      "🍾"
+    ];
+    const item = food[parseInt(Math.random() * food.length)];
+    this.element.className = "food";
+    this.element.innerHTML = `${item}`;
   }
 }
 
-class WineGlass extends MovingObject {
+class NotFood extends MovingObject {
   constructor() {
     super();
-    this.element.className = "WineGlass";
-    this.element.innerHTML = "🍷";
-    this.element.style.left = `${400}px`;
-    this.element.style.bottom = `${0}px`;
+    const notFood = [
+      "⚽️",
+      "🎱",
+      "🥌",
+      "🥊",
+      "🎲",
+      "🎺",
+      "🚲",
+      "🚕",
+      "🚨",
+      "🛩",
+      "🚀",
+      "🗿",
+      "🗽",
+      "🛸",
+      "⚓️",
+      "⏰",
+      "🔮",
+      "📸",
+      "💣",
+      "💊",
+      "💎",
+      "🔫",
+      "🔧",
+      "📦",
+      "🛒",
+      "🧶",
+      "🎁",
+      "📌",
+      "📫",
+      "🧦",
+      "😎",
+      "💩",
+      "🤖"
+    ];
+    const item = notFood[parseInt(Math.random() * notFood.length)];
+    this.element.className = "not-food";
+    this.element.innerHTML = `${item}`;
   }
 }
 
-class Bomb extends MovingObject {
-  constructor() {
-    super();
-    this.element.className = "bomb";
-    this.element.innerHTML = "💣";
-    this.element.style.left = `${0}px`;
-    this.element.style.bottom = `${800}px`;
-  }
-}
+// class Baguette extends MovingObject {
+//   constructor() {
+//     super();
+//     this.element.className = "baguette";
+//     this.element.innerHTML = "🥖";
+//     // this.element.style.left = `${0}px`;
+//     // this.element.style.bottom = `${300}px`;
+//   }
+// }
+
+// class WineGlass extends MovingObject {
+//   constructor() {
+//     super();
+//     this.element.className = "WineGlass";
+//     this.element.innerHTML = "🍷";
+//     this.element.style.left = `${400}px`;
+//     this.element.style.bottom = `${0}px`;
+//   }
+// }
+
+// class Bomb extends MovingObject {
+//   constructor() {
+//     super();
+//     this.element.className = "bomb";
+//     this.element.innerHTML = "💣";
+//     this.element.style.left = `${0}px`;
+//     this.element.style.bottom = `${800}px`;
+//   }
+// }
 
 // Objects being thrown
 
-const baguettes = [];
+function startGame() {
+  const pieces = [];
 
-function startBaguetteThrow() {
   setInterval(() => {
-    baguettes.push(new Baguette());
+    pieces.push(new Food());
   }, 5000);
 
   setInterval(() => {
-    baguettes.forEach(object => object.updatePosition());
-  }, 20);
+    pieces.push(new NotFood());
+  }, 10000);
+
   setInterval(() => {
-    baguettes.forEach(object => object.isCollide());
-  }, 10);
+    pieces.forEach(piece => {
+      piece.updatePosition();
+      piece.collisionCheck();
+    });
+  }, 20);
+  // setInterval(() => {
+  //   baguettes.forEach(object => object.isCollide());
+  // }, 10);
 }
 
 // const wineglasses = [];
