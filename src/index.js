@@ -192,6 +192,7 @@ let gameOver = (function() {
           }
 
           API.postApi(ApiURL, postInfo)
+          window.location.href = "../public/scoreboard.html";
       }
   };
 })();
