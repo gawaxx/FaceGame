@@ -176,14 +176,24 @@ var gameOver = (function() {
   return function() {
       if (!executed) {
           executed = true;
-          allElems.forEach(element => element.remove() )
-          getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
+          
           window.alert("Game Over loser ! 👎");
-          let postInfo = {
-            count: scoreBoard,
-            user_id: 3
-          }
-          API.postApi(ApiURL, postInfo)
+          window.addEventListener('click', event => function(event){
+
+            debugger
+
+            event.preventDefault()
+
+            allElems.forEach(element => element.remove() )
+            getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
+
+            let postInfo = {
+              count: scoreBoard,
+              user_id: 3
+            }
+
+            API.postApi(ApiURL, postInfo)
+          })
       }
   };
 })();
