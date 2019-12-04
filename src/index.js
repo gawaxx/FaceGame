@@ -95,15 +95,10 @@ function mouthIsOpen(mouth) {
 class MovingObject {
   constructor(){
     let newDiv = document.createElement('div')
-
-    newDiv.className = "dodger"
-    newDiv.innerHTML = "🥖"
-
     body.append(newDiv)
     this.element = newDiv
     this.element.style.left = `${500}px`
     this.element.style.bottom = `${300}px`
-
   }
   
   moveDodgerRight() {
@@ -138,13 +133,26 @@ class MovingObject {
   }
 }
 
+class Baguette extends MovingObject {
+  constructor(){
+    super()
+    // let newDiv = document.createElement('div')
+    // body.append(newDiv)
+    // this.element = newDiv
+    // this.element.style.left = `${500}px`
+    // this.element.style.bottom = `${300}px`
+    this.element.className = "dodger"
+    this.element.innerHTML = "🥖"
+  }
+}
+
 
 
 
 const objects = []
 function startThrow(){
   setInterval(() => {
-    objects.push(new MovingObject())
+    objects.push(new Baguette())
   }, 5000)
   setInterval( () => { objects.forEach(object => object.moveDodgerRight() )} , 300)
   setInterval( () => {objects.forEach(object => object.isCollide())}, 10 )
