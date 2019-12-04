@@ -52,7 +52,8 @@ video.addEventListener("play", () => {
     // mouthIsOpen(adjMouth);
   }, 500);
 
-  startThrow()
+  startBaguetteThrow()
+  startWineGlassThrow()
 
 });
 
@@ -95,8 +96,8 @@ function mouthIsOpen(mouth) {
 class MovingObject {
   constructor(){
     let newDiv = document.createElement('div')
-    body.append(newDiv)
     this.element = newDiv
+    body.append(newDiv)
   }
   
   moveDodgerRight() {
@@ -108,7 +109,7 @@ class MovingObject {
   }
 
   moveDodgerDown() {
-    let yPosition = this.element.style.left.replace("px", "");
+    let yPosition = this.element.style.bottom.replace("px", "");
     let y = parseInt(yPosition, 10)
 
     if (y > 1200) {this.element.remove()}
@@ -152,10 +153,10 @@ class Baguette extends MovingObject {
 class WineGlass extends MovingObject{
   constructor(){
     super()
-    this.element.style.left = `${300}px`
-    this.element.style.bottom = `${0}px`
     this.element.className = "WineGlass"
     this.element.innerHTML = "🍷"
+    this.element.style.left = `${300}px`
+    this.element.style.bottom = `${0}px`
   }
 }
 
@@ -169,7 +170,7 @@ function startBaguetteThrow(){
   setInterval(() => { baguettes.push(new Baguette( )) }, 5000)
 
   setInterval( () => { baguettes.forEach(object => object.moveDodgerRight() )} , 300)
-  setInterval( () => {baguettes.forEach(object => object.isCollide())}, 10 )
+  setInterval( () => { baguettes.forEach(object => object.isCollide()) }, 10 )
 
 }
 
@@ -177,10 +178,10 @@ const wineglasses = []
 
 function startWineGlassThrow(){
 
-  setInterval(() => { wineglasses.push(new Baguette( )) }, 8000)
+  setInterval(() => { wineglasses.push(new WineGlass( )) }, 8000)
 
   setInterval( () => { wineglasses.forEach(object => object.moveDodgerDown() )} , 200)
-  setInterval( () => {wineglasses.forEach(object => object.isCollide())}, 10 )
+  setInterval( () => { wineglasses.forEach(object => object.isCollide()) }, 10 )
 
 }
 

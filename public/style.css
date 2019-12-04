@@ -30,6 +30,17 @@ video {
     position: absolute;
     width: 60px;
     font-size: 60px;
-  }
+}
+
+
+.WineGlass {
+    /* background-color: black; */
+    padding-top: 200px;
+    height: 60px;
+    position: absolute;
+    width: 60px;
+    font-size: 60px;
+}
+
 
   
