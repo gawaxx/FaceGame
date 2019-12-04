@@ -52,8 +52,8 @@ video.addEventListener("play", () => {
     // const mouth = landmarks.getMouth();
 
     getMouthCoordinates(mouthRelativePositions, box, rect);
-  }, 100);
-  // debugger;
+    mouthIsOpen(mouthPoints, box);
+  }, 500);
   startThrow(mouthPoints);
 });
 
@@ -69,23 +69,30 @@ function getMouthCoordinates(positions, box, rect) {
   return mouthPoints;
 }
 
-function mouthIsOpen(mouth) {
-  // let outerLipTop = mouth[9];
-  // let innerLipTop = mouth[18];
-  // let innerLipBottom = mouth[14];
-  // let outerLipBottom = mouth[3];
+function mouthIsOpen(mouth, box) {
+  let outerLipTop = mouth[9].y;
+  let innerLipTop = mouth[18].y;
+  let innerLipBottom = mouth[14].y;
+  let outerLipBottom = mouth[3].y;
+  let headHeight = box.height;
 
-  const mouthHeight = faceapi.euclideanDistance(
-    [mouth[14].x, mouth[14].y],
-    [mouth[18].x, mouth[18].y]
-  );
-  const lipHeight = faceapi.euclideanDistance(
-    [mouth[9].x, mouth[9].y],
-    [mouth[3].x, mouth[3].y]
-  );
+  // const mouthHeight = faceapi.euclideanDistance(
+  //   [mouth[14].x, mouth[14].y],
+  //   [mouth[18].x, mouth[18].y]
+  // );
+  // const lipHeight = faceapi.euclideanDistance(
+  //   [mouth[9].x, mouth[9].y],
+  //   [mouth[3].x, mouth[3].y]
+  // );
+  // debugger;
 
-  let mouthOpen = mouthHeight > 50;
-  console.log(mouthOpen);
+  mouthHeight = innerLipTop - innerLipBottom;
+  lipHeight = outerLipTop - outerLipBottom;
+
+  let mouthOpen = mouthHeight > 20 && lipHeight > 30;
+  // let mouthOpen = lipHeight > 0.13 * headHeight;
+  console.log(`${lipHeight},${mouthHeight}`);
+  console.log(`${mouthOpen}`);
   return mouthOpen;
 }
 
