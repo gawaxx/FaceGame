@@ -1,6 +1,7 @@
 var video = document.querySelector("#videoElement");
 var mouthPoints = [];
 const body = document.querySelector('body')
+const scoreBoard = 0;
 
 window.addEventListener("click", () => {
   console.log(`${event.clientX},${event.clientY}`);
@@ -149,6 +150,8 @@ class MovingObject {
         rect1.y + rect1.height > rect2.y) {
 
         console.log("Collision")
+        this.element.remove();
+        scoreBoard++;
       }
     }
 
@@ -226,5 +229,3 @@ function startBombThrow(){
   setInterval( () => { bombs.forEach(object => object.isCollide()) }, 10 )
 
 }
-
-
