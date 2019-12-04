@@ -1,6 +1,13 @@
-// Variables
+// Variables 
+const allElems = []
+let isGameOver = false;
+let timeouts = [];
+let intervals = [];
+
+
 
 var video = document.querySelector("#videoElement");
+allElems.push(video)
 var mouthPoints = [];
 
 const body = document.querySelector("body");
@@ -81,9 +88,12 @@ video.addEventListener("play", () => {
     mouthIsOpen(mouthPoints, box);
     boxCoordinates(box, rect);
   }, 500);
+
+
   startGame();
   // setTimeout(startWineGlassThrow(), 30000);
   // setTimeout(startBombThrow(), 1000);
+
 });
 
 function boxCoordinates(box, rect) {
@@ -155,6 +165,15 @@ function startGame() {
   const intervals = [foodGenerator, notFoodGenerator, pieceUpdater];
 }
 
+function gameOver() {
+  allElems.forEach(element => element.remove() )
+  getScoreBoard.style.fontSize = `${200}px`
+  getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
+}
+
+// Moving object Class
+
+
 class MovingObject {
   constructor() {
     // Give it a random starting position, 'fenced' at 50px window border
@@ -216,11 +235,17 @@ class MovingObject {
         // API.getApi(ApiURL).then(data => data.forEach( scoreboard => function(scoreboard){
         //   scoreBoard = scoreboard.count
         // }))
+        if (this.element.className === "not-food"){
+          isGameOver = true;
+          gameOver()
+        }
 
-        console.log("Collision");
-        this.element.remove();
-        scoreBoard++;
-        getScoreBoard.innerHTML = scoreBoard;
+        else {
+          console.log("Collision")
+          this.element.remove();
+          scoreBoard++;
+          getScoreBoard.innerHTML = scoreBoard;
+        }
 
         // Post to API at the end of the game
         // let postInfo = {
