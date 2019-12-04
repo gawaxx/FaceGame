@@ -1,7 +1,6 @@
 // Variables 
 const allElems = []
 let isGameOver = false;
-let timeouts = [];
 let intervals = [];
 
 
@@ -162,14 +161,40 @@ function startGame() {
       piece.collisionCheck();
     });
   }, 20);
-  const intervals = [foodGenerator, notFoodGenerator, pieceUpdater];
+  intervals.push(foodGenerator)
+  intervals.push(notFoodGenerator)
+  intervals.push(pieceUpdater)
 }
 
-function gameOver() {
-  allElems.forEach(element => element.remove() )
-  getScoreBoard.style.fontSize = `${200}px`
-  getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
-}
+// function gameOver() {
+//   debugger
+//   allElems.forEach(element => element.remove() )
+//   getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
+// }
+
+let gameOver = (function() {
+  let executed = false;
+  return function() {
+      if (!executed) {
+          executed = true;
+
+          intervals.forEach(interval => clearInterval(interval))
+          
+          window.alert("Game Over loser ! 👎");
+
+          allElems.forEach(element => element.remove() )
+          getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
+
+
+          let postInfo = {
+            count: scoreBoard,
+            user_id: 3
+          }
+
+          API.postApi(ApiURL, postInfo)
+      }
+  };
+})();
 
 // Moving object Class
 
@@ -246,13 +271,6 @@ class MovingObject {
           scoreBoard++;
           getScoreBoard.innerHTML = scoreBoard;
         }
-
-        // Post to API at the end of the game
-        // let postInfo = {
-        //   count: scoreBoard,
-        // }
-
-        // API.postApi(`$[ApiURL}`, postInfo)
       }
     };
     functionStuff(theBoxCoordinates);
