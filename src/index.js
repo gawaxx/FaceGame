@@ -1,11 +1,34 @@
+// Variables 
+
 var video = document.querySelector("#videoElement");
 var mouthPoints = [];
+
+const body = document.querySelector('body')
+const mainContainer = document.querySelector('.container')
+
+const getScoreBoard = document.querySelector('#scoreboard')
+let scoreBoard = 0;
+
+const ApiURL = "http://localhost:3000/score_boards"; 
+
+// API Stuff 
+
+const headers = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+}
+
+const getApi = url => fetch(url).then(resp => resp.json() )
+const patchApi = (url, patchInfo) => fetch(url, { method: "PATCH", headers: headers, body: JSON.stringify(patchInfo) } ).then(resp => resp.json() )
+const postApi = (url, postInfo) => fetch(url, { method: "PATCH", headers: headers, body: JSON.stringify(postInfo) } ).then(resp => resp.json() )
+
+const API = { getApi, patchApi, postApi }
+
+// Code
 
 window.addEventListener("click", () => {
   console.log(`${event.clientX},${event.clientY}`);
 });
-
-const mainContainer = document.querySelector(".container");
 
 Promise.all([
   faceapi.nets.faceLandmark68TinyNet.loadFromUri("../src/models"),
@@ -53,9 +76,20 @@ video.addEventListener("play", () => {
 
     getMouthCoordinates(mouthRelativePositions, box, rect);
     mouthIsOpen(mouthPoints, box);
+    boxCoordinates(box, rect)
   }, 500);
-  startThrow(mouthPoints);
+  startBaguetteThrow()
+  setTimeout( startWineGlassThrow(), 30000 )
+  setTimeout( startBombThrow(), 1000)
 });
+
+function boxCoordinates(box, rect) {
+  theBoxCoordinates = []
+  x = box.x + .5 * box.width + rect.x
+  y = box.y + .5 * box.height + rect.y + 100
+  
+  return theBoxCoordinates = {x: x, y: y}
+}
 
 function getMouthCoordinates(positions, box, rect) {
   mouthPoints = [];
@@ -64,10 +98,9 @@ function getMouthCoordinates(positions, box, rect) {
     y = parseInt(rect.y + box.y + point.y * box.height);
     mouthPoints.push({ x, y });
   });
-
-  // console.log(mouthPoints[9]);
   return mouthPoints;
 }
+
 
 function mouthIsOpen(mouth, box) {
   // let outerLipTop = mouth[9].y;
@@ -118,79 +151,150 @@ function mouthIsOpen(mouth, box) {
   opening = parseInt((100 * mouthHeightAvg) / lipHeightAvg);
   let mouthOpen = opening >= 50;
   console.log(`${opening}% open, ${mouthOpen}`);
-  return mouthOpen;
+  return mouthPoints;
 }
 
+
 class MovingObject {
-  constructor() {
-    let newDiv = document.createElement("div");
-    // newDiv.id = 'dodger'
-    newDiv.className = "dodger";
-    newDiv.innerHTML = "🥖";
-    // this.x = 40;
-    // this.y = 40;
-    mainContainer.append(newDiv);
-    this.element = newDiv;
-    this.element.style.left = `${0}px`;
-    this.element.style.bottom = `${300}px`;
-    // this.element.style.left = `${20}px`
+  constructor(){
+    let newDiv = document.createElement('div')
+    this.element = newDiv
+    body.append(newDiv)
   }
 
   moveDodgerRight() {
     let xPosition = this.element.style.left.replace("px", "");
     let x = parseInt(xPosition, 10);
+    if (x > 1500) {this.element.remove()}
+    else if (x >= 0) { this.element.style.left = `${x + 20}px`; this.x = x + 20 }
+  }
 
-    if (x > 1500) {
-      this.element.remove();
-    } else if (x >= 0) {
-      this.element.style.left = `${x + 20}px`;
-      this.x = x + 20;
-    }
-    // let leftNumbers = this.element.style.left.replace("px", "");
-    // let left = parseInt(leftNumbers, 10);
+  moveDodgerDown() {
+    let yPosition = this.element.style.bottom.replace("px", "");
+    let y = parseInt(yPosition, 10)
 
-    // let bottomNumbers = this.element.style.left.replace("px", "");
-    // let bottom = parseInt(bottomNumbers, 10);
+    if (y > 1200) {this.element.remove()}
+    else if (y >= 0) { this.element.style.bottom = `${y + 20}px`; this.y = y + 20 }
+  }
 
-    // if (left > 1500) {this.element.remove()}
-    // else if (left > 0) { this.element.style.left = `${left + 20}px`; this.x = left + 20 }
+  moveDodgerSideWays(){
+    let xPosition = this.element.style.left.replace("px", "");
+    let x = parseInt(xPosition, 10)
+    let yPosition = this.element.style.bottom.replace("px", "");
+    let y = parseInt(yPosition, 10)
+
+    if (y > 1200) {this.element.remove()}
+    if (x > 1500) {this.element.remove()}
+
+    else if (x >= 0) { this.element.style.left = `${x + 20}px`; this.x = x + 20; this.element.style.bottom = `${y - 20}px`; this.y = y - 20 }
+
+
   }
 
   isCollide() {
-    // debugger
-    let xPosition = parseInt(this.element.style.left.replace("px", ""), 10);
-    let yPosition =
-      window.innerHeight -
-      parseInt(this.element.style.bottom.replace("px", ""), 10);
+    let xPosition = parseInt(this.element.style.left.replace("px", ""),10);
+    let yPosition = window.innerHeight - parseInt(this.element.style.bottom.replace("px", ""),10);
+    
+    let functionStuff = (point) => {
+      
 
-    let functionStuff = point => {
-      // debugger;
-      let rect1 = { x: xPosition, y: yPosition, width: 60, height: 60 };
-      let rect2 = { x: point.x, y: point.y, width: 10, height: 10 };
-      // debugger
-      if (
-        rect1.x < rect2.x + rect2.width &&
+      let rect1 = {x: xPosition, y: yPosition, width: 60, height: 60}
+      let rect2 = {x: point.x , y: point.y , width: 60, height: 60 } 
+
+      if (rect1.x < rect2.x + rect2.width &&
         rect1.x + rect1.width > rect2.x &&
         rect1.y < rect2.y + rect2.height &&
-        rect1.y + rect1.height > rect2.y
-      ) {
-        console.log("Collision");
+        rect1.y + rect1.height > rect2.y) {
+        // API.getApi(ApiURL).then(data => data.forEach( scoreboard => function(scoreboard){
+        //   scoreBoard = scoreboard.count
+        // }))
+
+        console.log("Collision")
+        this.element.remove();
+        scoreBoard++;
+        getScoreBoard.innerHTML = scoreBoard;
+
+
+        // Post to API at the end of the game
+        // let postInfo = {
+        //   count: scoreBoard,
+        // }
+
+        // API.postApi(`$[ApiURL}`, postInfo)
       }
     };
 
-    mouthPoints.forEach(point => functionStuff(point));
+    functionStuff(theBoxCoordinates) 
+    
   }
 }
 
-const objects = [];
-function startThrow() {
-  setInterval(() => {
-    objects.push(new MovingObject());
-  }, 5000);
-  setInterval(() => {
-    objects.forEach(object => object.moveDodgerRight());
-  }, 300);
-  setInterval(() => {
-    objects.forEach(object => object.isCollide());
-  }, 10);
+// Definition of objects
+
+class Baguette extends MovingObject {
+  constructor(){
+    super()
+    this.element.className = "baguette"
+    this.element.innerHTML = "🥖"
+    this.element.style.left = `${0}px`
+    this.element.style.bottom = `${300}px`
+  }
+}
+
+class WineGlass extends MovingObject{
+  constructor(){
+    super()
+    this.element.className = "WineGlass"
+    this.element.innerHTML = "🍷"
+    this.element.style.left = `${400}px`
+    this.element.style.bottom = `${0}px`
+  }
+}
+
+class Bomb extends MovingObject{
+  constructor(){
+    super()
+    this.element.className = "bomb"
+    this.element.innerHTML = "💣"
+    this.element.style.left = `${0}px`
+    this.element.style.bottom = `${800}px`
+  }
+}
+  
+
+
+
+// Objects being thrown
+
+const baguettes = []
+
+function startBaguetteThrow(){
+
+  setInterval(() => { baguettes.push(new Baguette( )) }, 5000)
+
+  setInterval( () => { baguettes.forEach(object => object.moveDodgerRight() )} , 300)
+  setInterval( () => { baguettes.forEach(object => object.isCollide()) }, 10 )
+
+}
+
+const wineglasses = []
+
+function startWineGlassThrow(){
+
+  setInterval(() => { wineglasses.push(new WineGlass( )) }, 8000)
+
+  setInterval( () => { wineglasses.forEach(object => object.moveDodgerDown() )} , 200)
+  setInterval( () => { wineglasses.forEach(object => object.isCollide()) }, 10 )
+
+}
+
+const bombs = []
+
+function startBombThrow(){
+
+  setInterval(() => { bombs.push(new Bomb( )) }, 15000)
+
+  setInterval( () => { bombs.forEach(object => object.moveDodgerSideWays() )} , 100)
+  setInterval( () => { bombs.forEach(object => object.isCollide()) }, 10 )
+
 }

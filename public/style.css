@@ -25,11 +25,37 @@ video {
     top: 16%; */
 }
 
-.dodger {
-  /* background-color: black; */
-  padding-top: 200px;
-  height: 60px;
-  position: absolute;
-  width: 60px;
-  font-size: 60px;
+
+.scoreboard {
+    font-size: 40px;
+    left: 0px;
+    bottom: 80px;
+    background-color: white;
+}
+
+.baguette {
+    /* background-color: black; */
+    padding-top: 200px;
+    height: 60px;
+    position: absolute;
+    width: 60px;
+    font-size: 60px;
+}
+
+.WineGlass {
+    /* background-color: black; */
+    padding-top: 200px;
+    height: 60px;
+    position: absolute;
+    width: 60px;
+    font-size: 60px;
+}
+
+.bomb {
+    /* background-color: black; */
+    padding-top: 200px;
+    height: 60px;
+    position: absolute;
+    width: 60px;
+    font-size: 60px;
 }
