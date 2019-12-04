@@ -105,26 +105,7 @@ function getMouthCoordinates(positions, box, rect) {
 }
 
 function mouthIsOpen(mouth, box) {
-  // let outerLipTop = mouth[9].y;
-  // let innerLipTop = mouth[18].y;
-  // let innerLipBottom = mouth[14].y;
-  // let outerLipBottom = mouth[3].y;
-  // let headHeight = box.height;
-
-  // const mouthHeight = faceapi.euclideanDistance(
-  //   [mouth[14].x, mouth[14].y],
-  //   [mouth[18].x, mouth[18].y]
-  // );
-  // const lipHeight = faceapi.euclideanDistance(
-  //   [mouth[9].x, mouth[9].y],
-  //   [mouth[3].x, mouth[3].y]
-  // );
-  // debugger;
-  // console.log(`${parseInt((100 * mouthHeight) / box.height)}%`);
-  // let mouthOpen = lipHeight > 0.13 * headHeight;
-  // console.log(`${lipHeight},${mouthHeight}`);
-
-  // Get relevant y coordinates from mouthPoints
+  // Define 12 mouth points
   let outerLipTopRight = mouth[8].y;
   let outerLipTopMid = mouth[9].y;
   let outerLipTopLeft = mouth[10].y;
@@ -138,12 +119,11 @@ function mouthIsOpen(mouth, box) {
   let outerLipBottomMid = mouth[3].y;
   let outerLipBottomRight = mouth[4].y;
 
-  // Average out the lip heights and mouth heights
+  // Average out the lip heights and mouth heights from mouth points
   mouthHeightLeft = innerLipTopLeft - innerLipBottomLeft;
   mouthHeightMid = innerLipTopMid - innerLipBottomMid;
   mouthHeightRight = innerLipTopRight - innerLipBottomRight;
   mouthHeightAvg = (mouthHeightLeft + mouthHeightMid + mouthHeightRight) / 3;
-
   lipHeightLeft = outerLipTopLeft - outerLipBottomLeft;
   lipHeightMid = outerLipTopMid - outerLipBottomMid;
   lipHeightRight = outerLipTopRight - outerLipBottomRight;
@@ -154,6 +134,25 @@ function mouthIsOpen(mouth, box) {
   let mouthOpen = opening >= 50;
   console.log(`${opening}% open, ${mouthOpen}`);
   return mouthPoints;
+}
+
+function startGame() {
+  const pieces = [];
+  const foodGenerator = setInterval(() => {
+    pieces.push(new Food());
+  }, 5000);
+
+  const notFoodGenerator = setInterval(() => {
+    pieces.push(new NotFood());
+  }, 10000);
+
+  const pieceUpdater = setInterval(() => {
+    pieces.forEach(piece => {
+      piece.updatePosition();
+      piece.collisionCheck();
+    });
+  }, 20);
+  const intervals = [foodGenerator, notFoodGenerator, pieceUpdater];
 }
 
 class MovingObject {
@@ -381,23 +380,4 @@ class NotFood extends MovingObject {
     this.element.className = "not-food";
     this.element.innerHTML = `${item}`;
   }
-}
-
-function startGame() {
-  const pieces = [];
-  const foodGenerator = setInterval(() => {
-    pieces.push(new Food());
-  }, 5000);
-
-  const notFoodGenerator = setInterval(() => {
-    pieces.push(new NotFood());
-  }, 10000);
-
-  const pieceUpdater = setInterval(() => {
-    pieces.forEach(piece => {
-      piece.updatePosition();
-      piece.collisionCheck();
-    });
-  }, 20);
-  const intervals = [foodGenerator, notFoodGenerator, pieceUpdater];
 }
