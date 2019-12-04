@@ -52,7 +52,7 @@ video.addEventListener("play", () => {
     // mouthIsOpen(adjMouth);
   }, 500);
 
-  startThrow(boxCoordinates)
+  startThrow()
 
 });
 
@@ -97,8 +97,6 @@ class MovingObject {
     let newDiv = document.createElement('div')
     body.append(newDiv)
     this.element = newDiv
-    this.element.style.left = `${500}px`
-    this.element.style.bottom = `${300}px`
   }
   
   moveDodgerRight() {
@@ -107,6 +105,14 @@ class MovingObject {
 
     if (x > 1500) {this.element.remove()}
     else if (x >= 0) { this.element.style.left = `${x + 20}px`; this.x = x + 20 }
+  }
+
+  moveDodgerDown() {
+    let yPosition = this.element.style.left.replace("px", "");
+    let y = parseInt(yPosition, 10)
+
+    if (y > 1200) {this.element.remove()}
+    else if (y >= 0) { this.element.style.bottom = `${y + 20}px`; this.y = y + 20 }
   }
 
   isCollide() {
@@ -138,12 +144,16 @@ class Baguette extends MovingObject {
     super()
     this.element.className = "baguette"
     this.element.innerHTML = "🥖"
+    this.element.style.left = `${0}px`
+    this.element.style.bottom = `${300}px`
   }
 }
 
 class WineGlass extends MovingObject{
   constructor(){
     super()
+    this.element.style.left = `${300}px`
+    this.element.style.bottom = `${0}px`
     this.element.className = "WineGlass"
     this.element.innerHTML = "🍷"
   }
@@ -152,13 +162,26 @@ class WineGlass extends MovingObject{
 
 
 
-const objects = []
-function startThrow(){
-  setInterval(() => {
-    objects.push(new Baguette())
-  }, 5000)
-  setInterval( () => { objects.forEach(object => object.moveDodgerRight() )} , 300)
-  setInterval( () => {objects.forEach(object => object.isCollide())}, 10 )
+const baguettes = []
+
+function startBaguetteThrow(){
+
+  setInterval(() => { baguettes.push(new Baguette( )) }, 5000)
+
+  setInterval( () => { baguettes.forEach(object => object.moveDodgerRight() )} , 300)
+  setInterval( () => {baguettes.forEach(object => object.isCollide())}, 10 )
+
+}
+
+const wineglasses = []
+
+function startWineGlassThrow(){
+
+  setInterval(() => { wineglasses.push(new Baguette( )) }, 8000)
+
+  setInterval( () => { wineglasses.forEach(object => object.moveDodgerDown() )} , 200)
+  setInterval( () => {wineglasses.forEach(object => object.isCollide())}, 10 )
+
 }
 
 
