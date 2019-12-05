@@ -11,7 +11,6 @@ class ScoreBoardsController < ApplicationController
     end
 
     def create
-        byebug
         new_scoreboard = ScoreBoard.new 
         new_scoreboard.user_id = params[:user_id]
         new_scoreboard.count = params[:count]
