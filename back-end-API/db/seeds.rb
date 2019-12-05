@@ -14,8 +14,8 @@ User.destroy_all
 puts "Cleaned all users"
 
 
-user1 = User.create(name: "Bob")
-puts "Created one user"
+# user1 = User.create(name: "Bob")
+# puts "Created one user"
 
-scoreboard1 = ScoreBoard.create(count: 0, user_id: 3)
+scoreboard1 = ScoreBoard.create(count: 0, name: "Bob")
 puts "Created one scoreboard"

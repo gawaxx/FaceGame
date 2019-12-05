@@ -11,8 +11,19 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgb(253,29,29);
-  background: linear-gradient(133deg, rgba(253,29,29,1) 0%, rgba(131,58,180,1) 24%, rgba(253,29,29,1) 54%, rgba(252,176,69,1) 73%, rgba(131,58,180,1) 100%);
+  /* background-color: black; */
+  background-image: url("background.jpg");
+
+  /* background: rgb(253,29,29);
+  background: linear-gradient(133deg, rgba(253,29,29,1) 0%, rgba(131,58,180,1) 24%, rgba(253,29,29,1) 54%, rgba(252,176,69,1) 73%, rgba(131,58,180,1) 100%); */
+}
+
+h1 {
+  position: absolute;
+  bottom: 87%;
+  text-align: center;
+  font-family: Didot;
+  font-size: 50px;
 }
 
 canvas {
@@ -26,18 +37,36 @@ video {
     top: 16%; */
 }
 
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 70px; /* Height of the footer */
+  background: #343a40;
+}
+
+p {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  font-family: "Helvetica Neue";
+  color: #586167;
+}
+
 .scoreboard {
-    width: 300px;
+  width: 300px;
   position: absolute;
   font-size: 40px;
-  left: 40%;
-  bottom: 90%;
-  background-color: white;
+  left: 38%;
+  bottom: 85%;
+  /* background-color: #343a40; */
   text-align: center;
+  font-family: Didot;
 }
 
 .food {
-  padding-top: 200px;
+  /* padding-top: 200px; */
   height: 60px;
   position: absolute;
   width: 60px;
@@ -45,73 +74,9 @@ video {
 }
 
 .not-food {
-  padding-top: 200px;
+  /* padding-top: 200px; */
   height: 60px;
   position: absolute;
   width: 60px;
   font-size: 60px;
-}
-
-.baguette {
-  /* background-color: black; */
-  padding-top: 200px;
-  height: 60px;
-  position: absolute;
-  width: 60px;
-  font-size: 60px;
-}
-
-.WineGlass {
-  /* background-color: black; */
-  padding-top: 200px;
-  height: 60px;
-  position: absolute;
-  width: 60px;
-  font-size: 60px;
-}
-
-.bomb {
-  /* background-color: black; */
-  padding-top: 200px;
-  height: 60px;
-  position: absolute;
-  width: 60px;
-  font-size: 60px;
-}
-
-/* Top Style  */
-
-.top {
-    border-style: solid;
-    border-color: white;
-    text-align: center;
-    position: absolute;
-    padding-bottom: 45%;
-    max-height: 10vh;
-}
-
-.top h1 {
-    color: white;
-    font-size: 45px;
-}
-
-.top p {
-    color: white;
-    font-size: 20px;
-}
-
-/* Table Style */
-
-.table {
-    position: absolute;
-    border-style: solid;
-    border-color: white;
-}
-
-.table p {
-    color: white;
-}
-
-.table table {
-    color: white;
 }
