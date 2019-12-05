@@ -18,6 +18,12 @@ body {
   background: linear-gradient(133deg, rgba(253,29,29,1) 0%, rgba(131,58,180,1) 24%, rgba(253,29,29,1) 54%, rgba(252,176,69,1) 73%, rgba(131,58,180,1) 100%); */
 }
 
+h1 {
+  position: absolute;
+  bottom: 90%;
+  text-align: center;
+}
+
 canvas {
   position: absolute;
 }
@@ -33,8 +39,8 @@ video {
   width: 300px;
   position: absolute;
   font-size: 40px;
-  left: 40%;
-  bottom: 90%;
+  left: 38%;
+  bottom: 85%;
   background-color: white;
   text-align: center;
 }
