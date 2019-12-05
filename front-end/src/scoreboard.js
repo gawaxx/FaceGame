@@ -27,15 +27,18 @@ const API = { getApi, patchApi, postApi };
 
 // Functions 
 
-document.addEventListener('DOMContentLoaded', function() {
-    API.getApi(ApiURL).then(data => data.forEach(scoreboard => renderScore(scoreboard)))
-})
+document.addEventListener('DOMContentLoaded', (event) => getStuff(event))
+
+function getStuff(event) {
+  event.preventDefault()
+  API.getApi(ApiURL).then(data => data.forEach(scoreboard => renderScore(scoreboard)))
+}
 
 function renderScore(scoreboard) {
     // debugger
     let newTr = document.createElement('tr')
     let newtdName = document.createElement('td')
-    newtdName.innerHTML = scoreboard.user_id
+    newtdName.innerHTML = scoreboard.name
 
     let newtdScore = document.createElement('td')
     newtdScore.innerHTML = scoreboard.count

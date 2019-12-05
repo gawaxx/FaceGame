@@ -20,7 +20,7 @@ const ApiURL = "http://localhost:3000/score_boards";
 // API Stuff
 
 const headers = {
-  Accept: "application/json",
+  "Accept": "application/json",
   "Content-Type": "application/json"
 };
 
@@ -33,7 +33,7 @@ const patchApi = (url, patchInfo) =>
   }).then(resp => resp.json());
 const postApi = (url, postInfo) =>
   fetch(url, {
-    method: "PATCH",
+    method: "POST",
     headers: headers,
     body: JSON.stringify(postInfo)
   }).then(resp => resp.json());
@@ -41,6 +41,7 @@ const postApi = (url, postInfo) =>
 const API = { getApi, patchApi, postApi };
 
 // Code
+
 
 window.addEventListener("click", () => {
   console.log(`${event.clientX},${event.clientY}`);
@@ -177,22 +178,18 @@ let gameOver = (function() {
   return function() {
       if (!executed) {
           executed = true;
-
-          intervals.forEach(interval => clearInterval(interval))
           
           window.alert("Game Over loser ! 👎");
-
-          allElems.forEach(element => element.remove() )
           getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
-
 
           let postInfo = {
             count: scoreBoard,
             user_id: 3
           }
 
-          API.postApi(ApiURL, postInfo)
-          window.location.href = "../public/scoreboard.html";
+          API.postApi(`${ApiURL}/create`, postInfo).then(
+            window.location.href = "../public/scoreboard.html"
+            );
       }
   };
 })();
