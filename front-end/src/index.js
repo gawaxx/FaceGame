@@ -179,16 +179,17 @@ let gameOver = (function() {
       if (!executed) {
           executed = true;
           
-          window.alert("Game Over loser ! 👎");
           getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
-
+          
+          window.alert("Game Over loser ! 👎");
           let postInfo = {
             count: scoreBoard,
             user_id: 3
           }
 
-          API.postApi(`${ApiURL}/create`, postInfo).then(
-            window.location.href = "../public/scoreboard.html"
+          API.postApi(ApiURL, postInfo).then(
+            window.location.href = "../public/scoreboard.html",
+            console.log("OVER HERE")
             );
       }
   };

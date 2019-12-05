@@ -18,7 +18,7 @@ const patchApi = (url, patchInfo) =>
   }).then(resp => resp.json());
 const postApi = (url, postInfo) =>
   fetch(url, {
-    method: "PATCH",
+    method: "POST",
     headers: headers,
     body: JSON.stringify(postInfo)
   }).then(resp => resp.json());
