@@ -27,26 +27,34 @@ const API = { getApi, patchApi, postApi };
 
 // Functions 
 
-// document.addEventListener('DOMContentLoaded', () => {
-  API.getApi(ApiURL).then(data => data.map(scoreboard => renderScore(scoreboard)))
-// })
-
-// function getStuff(event) {
-  // event.preventDefault()
-  // API.getApi(ApiURL).then(data => data.forEach(scoreboard => renderScore(scoreboard)))
-// }
+API.getApi(ApiURL).then(data => sortScore(data)) //.forEach(scoreboard => sortScore(scoreboard)) )          //renderScore(scoreboard)))
 
 
-function renderScore(scoreboard) {
+function sortScore(data) {
+
+  let sortedData = data.sort((a, b) => (a.count < b.count) ? 1 : -1)
+
+  sortedData.map(scoreboard => renderScore(scoreboard, sortedData.indexOf(scoreboard)))
+
+}
+
+function compare(a, b) {
+  if (a > b) return 1;
+  if (b > a) return -1;
+
+  return 0;
+}
+
+function renderScore(scoreboard, position) {
     let newTr = document.createElement('tr')
     let newtdName = document.createElement('td')
-    newtdName.innerHTML = scoreboard.user.name
+    newtdName.innerHTML = scoreboard.name
 
     let newtdScore = document.createElement('td')
     newtdScore.innerHTML = scoreboard.count
 
     let newtdRank = document.createElement('td')
-    newtdRank.innerHTML = "NO rank yet"
+    newtdRank.innerHTML = position + 1
 
     newTr.append(newtdName, newtdScore, newtdRank)
     table.append(newTr)

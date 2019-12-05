@@ -142,19 +142,17 @@ let gameOver = (function() {
     if (!executed) {
       executed = true;
       getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`;
+
       let person = prompt("Game Over loser ! 👎, Enter Your Name: ", "");
-      let postInfoUr = {
+      
+      let postInfo = {
+        count: scoreBoard,
         name: person
-      };
-      API.postApi(UserURL, postInfoUr)
-        .then(user => {
-          let postInfoSc = {
-            count: scoreBoard,
-            user_id: user.id
-          };
-          return API.postApi(ApiURL, postInfoSc);
-        })
-        .then((window.location.href = "../public/scoreboard.html"));
+      }
+      
+      // debugger
+
+      API.postApi(ApiURL, postInfo).then((window.location.href = "../public/scoreboard.html"));
     }
   };
 })();
