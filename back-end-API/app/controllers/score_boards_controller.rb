@@ -2,7 +2,7 @@ class ScoreBoardsController < ApplicationController
 
     def index
         scoreboards = ScoreBoard.all
-        render json: scoreboards
+        render json: scoreboards, include: [:user]
     end 
 
     def show 

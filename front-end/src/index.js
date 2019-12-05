@@ -16,7 +16,7 @@ const getScoreBoard = document.querySelector("#scoreboard");
 let scoreBoard = 0;
 
 const ApiURL = "http://localhost:3000/score_boards";
-
+const UserURL = "http://localhost:3000/users/"
 // API Stuff
 
 const headers = {
@@ -181,13 +181,24 @@ let gameOver = (function() {
           
           getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
           
-          window.alert("Game Over loser ! 👎");
-          let postInfo = {
-            count: scoreBoard,
-            user_id: 3
+          // window.alert("Game Over loser ! 👎");
+          let person = prompt("Game Over loser ! 👎, Enter Your Name: ", "")
+
+          let postInfoUr = {
+            name: person
           }
 
-          API.postApi(ApiURL, postInfo).then(window.location.href = "../public/scoreboard.html");
+          API.postApi(UserURL, postInfoUr)
+            .then(user => {
+              let postInfoSc = {
+                count: scoreBoard,
+                user_id: user.id
+              }
+              return API.postApi(ApiURL, postInfoSc)
+            })
+            .then(window.location.href = "../public/scoreboard.html")
+
+
       }
   };
 })();
