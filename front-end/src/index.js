@@ -20,27 +20,28 @@ const ApiURL = "http://localhost:3000/score_boards";
 // API Stuff
 
 const headers = {
-  Accept: "application/json",
-  "Content-Type": "application/json"
+  "Content-Type": "application/json",
+  Accept: "application/json"
 };
 
-const getApi = url => fetch(url).then(resp => resp.json());
-const patchApi = (url, patchInfo) =>
-  fetch(url, {
+const getApi = url => { return fetch(url).then(resp => resp.json());}
+const patchApi = (url, patchInfo) => {
+  return fetch(url, {
     method: "PATCH",
     headers: headers,
     body: JSON.stringify(patchInfo)
-  }).then(resp => resp.json());
-const postApi = (url, postInfo) =>
-  fetch(url, {
-    method: "PATCH",
+  }).then(resp => resp.json()); }
+const postApi = (url, postInfo) => {
+    return fetch(url, {
+    method: "POST",
     headers: headers,
     body: JSON.stringify(postInfo)
-  }).then(resp => resp.json());
+  }).then(resp => resp.json()); }
 
 const API = { getApi, patchApi, postApi };
 
 // Code
+
 
 window.addEventListener("click", () => {
   console.log(`${event.clientX},${event.clientY}`);
@@ -177,21 +178,16 @@ let gameOver = (function() {
   return function() {
       if (!executed) {
           executed = true;
-
-          intervals.forEach(interval => clearInterval(interval))
+          
+          getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
           
           window.alert("Game Over loser ! 👎");
-
-          allElems.forEach(element => element.remove() )
-          getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
-
-
           let postInfo = {
             count: scoreBoard,
             user_id: 3
           }
 
-          API.postApi(ApiURL, postInfo)
+          API.postApi(ApiURL, postInfo).then(window.location.href = "../public/scoreboard.html");
       }
   };
 })();
