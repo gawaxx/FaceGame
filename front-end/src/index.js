@@ -3,12 +3,14 @@ const allElems = [];
 let isGameOver = false;
 let intervals = [];
 
+let audio = new Audio('audio_file.mp3');
+
 // video.style.cssText =
 //   "-moz-transform: scale(-1, 1); \
 // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
 // transform: scale(-1, 1); filter: FlipH;";
 allElems.push(video);
-var mouthPoints = [];
+let mouthPoints = [];
 
 const body = document.querySelector("body");
 const mainContainer = document.querySelector(".container");
