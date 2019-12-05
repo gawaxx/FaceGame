@@ -16,7 +16,7 @@ const getScoreBoard = document.querySelector("#scoreboard");
 let scoreBoard = 0;
 
 const ApiURL = "http://localhost:3000/score_boards";
-
+const UserURL = "http://localhost:3000/users/"
 // API Stuff
 
 const headers = {
@@ -181,14 +181,14 @@ let gameOver = (function() {
           
           getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
           
-          window.alert("Game Over loser ! 👎");
-          let person = prompt("Game Over loser ! 👎, Enter Your Name: ", "");
+          // window.alert("Game Over loser ! 👎");
+          let person = prompt("Game Over loser ! 👎, Enter Your Name: ", "")
 
           let postInfoUr = {
-            name: person.value 
+            name: person
           }
 
-          API.postApi(`http://localhost:3000/users/`, postInfoUr).then(
+          API.postApi(UserURL, postInfoUr).then(
             user => function(){
               let postInfoSc = {
                 count: scoreBoard,
