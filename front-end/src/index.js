@@ -1,12 +1,10 @@
-// Variables 
-const allElems = []
+// Variables
+const allElems = [];
 let isGameOver = false;
 let intervals = [];
 
-
-
 var video = document.querySelector("#videoElement");
-allElems.push(video)
+allElems.push(video);
 var mouthPoints = [];
 
 const body = document.querySelector("body");
@@ -16,7 +14,7 @@ const getScoreBoard = document.querySelector("#scoreboard");
 let scoreBoard = 0;
 
 const ApiURL = "http://localhost:3000/score_boards";
-const UserURL = "http://localhost:3000/users/"
+const UserURL = "http://localhost:3000/users/";
 // API Stuff
 
 const headers = {
@@ -24,24 +22,27 @@ const headers = {
   Accept: "application/json"
 };
 
-const getApi = url => { return fetch(url).then(resp => resp.json());}
+const getApi = url => {
+  return fetch(url).then(resp => resp.json());
+};
 const patchApi = (url, patchInfo) => {
   return fetch(url, {
     method: "PATCH",
     headers: headers,
     body: JSON.stringify(patchInfo)
-  }).then(resp => resp.json()); }
+  }).then(resp => resp.json());
+};
 const postApi = (url, postInfo) => {
-    return fetch(url, {
+  return fetch(url, {
     method: "POST",
     headers: headers,
     body: JSON.stringify(postInfo)
-  }).then(resp => resp.json()); }
+  }).then(resp => resp.json());
+};
 
 const API = { getApi, patchApi, postApi };
 
 // Code
-
 
 window.addEventListener("click", () => {
   console.log(`${event.clientX},${event.clientY}`);
@@ -85,25 +86,8 @@ video.addEventListener("play", () => {
     // canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
     // faceapi.draw.drawDetections(canvas, resizedDetections);
     // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-<<<<<<< HEAD:src/index.js
   }, 200);
   startGame();
-=======
-
-    let landmarks = await faceapi.detectFaceLandmarksTiny(video);
-    mouthRelativePositions = landmarks.relativePositions.slice(-20);
-
-    getMouthCoordinates(mouthRelativePositions, box, rect);
-    mouthIsOpen(mouthPoints, box);
-    boxCoordinates(box, rect);
-  }, 500);
-
-
-  startGame();
-  // setTimeout(startWineGlassThrow(), 30000);
-  // setTimeout(startBombThrow(), 1000);
-
->>>>>>> 9b969077b745a8bddb31ceb6b15062e58b45a326:front-end/src/index.js
 });
 
 function getMouthCoordinates(positions, box, rect) {
@@ -167,9 +151,9 @@ function startGame() {
       piece.collisionCheck();
     });
   }, 20);
-  intervals.push(foodGenerator)
-  intervals.push(notFoodGenerator)
-  intervals.push(pieceUpdater)
+  intervals.push(foodGenerator);
+  intervals.push(notFoodGenerator);
+  intervals.push(pieceUpdater);
 }
 
 // function gameOver() {
@@ -181,35 +165,32 @@ function startGame() {
 let gameOver = (function() {
   let executed = false;
   return function() {
-      if (!executed) {
-          executed = true;
-          
-          getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
-          
-          // window.alert("Game Over loser ! 👎");
-          let person = prompt("Game Over loser ! 👎, Enter Your Name: ", "")
+    if (!executed) {
+      executed = true;
 
-          let postInfoUr = {
-            name: person
-          }
+      getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`;
 
-          API.postApi(UserURL, postInfoUr)
-            .then(user => {
-              let postInfoSc = {
-                count: scoreBoard,
-                user_id: user.id
-              }
-              return API.postApi(ApiURL, postInfoSc)
-            })
-            .then(window.location.href = "../public/scoreboard.html")
+      // window.alert("Game Over loser ! 👎");
+      let person = prompt("Game Over loser ! 👎, Enter Your Name: ", "");
 
+      let postInfoUr = {
+        name: person
+      };
 
-      }
+      API.postApi(UserURL, postInfoUr)
+        .then(user => {
+          let postInfoSc = {
+            count: scoreBoard,
+            user_id: user.id
+          };
+          return API.postApi(ApiURL, postInfoSc);
+        })
+        .then((window.location.href = "../public/scoreboard.html"));
+    }
   };
 })();
 
 // Moving object Class
-
 
 class MovingObject {
   constructor() {
@@ -263,7 +244,6 @@ class MovingObject {
   }
 
   collisionCheck() {
-<<<<<<< HEAD:src/index.js
     // piece hit box is defined as the dimensions and location of its div element
     let pieceHitbox = {
       x: this.position.x,
@@ -292,45 +272,14 @@ class MovingObject {
       console.log("Collision");
       if (this.element.className === "not-food") {
         // GAME OVER
-        console.log("GAME OVER");
-        this.element.remove();
+        isGameOver = true;
+        gameOver();
       } else {
-        console.log("GNOM NOM NOM");
+        // console.log("GNOM NOM NOM");
         this.eaten = true;
         this.element.remove();
-        scoreBoard++;
+        scoreBoard += 1000;
         getScoreBoard.innerHTML = scoreBoard;
-=======
-    let xPosition = parseInt(this.element.style.left.replace("px", ""), 10);
-    let yPosition =
-      window.innerHeight -
-      parseInt(this.element.style.bottom.replace("px", ""), 10);
-
-    let functionStuff = point => {
-      let rect1 = { x: xPosition, y: yPosition, width: 60, height: 60 };
-      let rect2 = { x: point.x, y: point.y, width: 60, height: 60 };
-
-      if (
-        rect1.x < rect2.x + rect2.width &&
-        rect1.x + rect1.width > rect2.x &&
-        rect1.y < rect2.y + rect2.height &&
-        rect1.y + rect1.height > rect2.y
-      ) {
-        // API.getApi(ApiURL).then(data => data.forEach( scoreboard => function(scoreboard){
-        //   scoreBoard = scoreboard.count
-        // }))
-        if (this.element.className === "not-food"){
-          isGameOver = true;
-          gameOver()
-        }
-
-        else {
-          console.log("Collision")
-          this.element.remove();
-          scoreBoard++;
-          getScoreBoard.innerHTML = scoreBoard;
-        }
->>>>>>> 9b969077b745a8bddb31ceb6b15062e58b45a326:front-end/src/index.js
       }
     }
   }
