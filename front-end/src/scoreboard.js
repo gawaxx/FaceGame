@@ -40,7 +40,7 @@ API.getApi(ApiURL).then(data => data.forEach(scoreboard => renderScore(scoreboar
 function renderScore(scoreboard) {
     let newTr = document.createElement('tr')
     let newtdName = document.createElement('td')
-    newtdName.innerHTML = scoreboard.user_id
+    newtdName.innerHTML = scoreboard.user.name
 
     let newtdScore = document.createElement('td')
     newtdScore.innerHTML = scoreboard.count
