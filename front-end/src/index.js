@@ -14,6 +14,7 @@ const body = document.querySelector("body");
 const mainContainer = document.querySelector(".container");
 var video = document.querySelector("#videoElement");
 const getScoreBoard = document.querySelector("#scoreboard");
+const header = document.querySelector("h1");
 let scoreBoard = 0;
 
 // Code
@@ -241,7 +242,7 @@ class Piece {
         isGameOver = true;
         gameOver();
       } else {
-        // console.log("GNOM NOM NOM");
+        // header.innerText = "Delicieux! 👌🏼";
         this.eaten = true;
         this.element.remove();
         scoreBoard += 1000;
