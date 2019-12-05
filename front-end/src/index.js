@@ -4,6 +4,10 @@ let isGameOver = false;
 let intervals = [];
 
 var video = document.querySelector("#videoElement");
+// video.style.cssText =
+//   "-moz-transform: scale(-1, 1); \
+// -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
+// transform: scale(-1, 1); filter: FlipH;";
 allElems.push(video);
 var mouthPoints = [];
 
@@ -56,10 +60,20 @@ Promise.all([
 ]).then(start);
 
 function start() {
-  navigator.getUserMedia(
-    { video: {} },
-    stream => (video.srcObject = stream),
-    err => console.error(err)
+  // navigator.getUserMedia(
+  //   { video: {} },
+  //   stream => (video.srcObject = stream),
+  //   err => console.error(err)
+  // );
+  alert(
+    "Welcome to Bon APPetit! 🍽 In order to play, you'll need to grant the site access to your camera.\n\nClose this message, and then choose 'Allow' when your browser asks if you'd like to share your camera."
+  );
+  navigator.mediaDevices
+    .getUserMedia({ video: true })
+    .then(stream => (video.srcObject = stream))
+    .catch(err => alert(`${err})`));
+  alert(
+    "Great! Welcome to our restaurant. The chef's have been working with some rather... exotic... ingredients. To be honest, they're just throwing food around at this point.\n\nEat like you normally do: just open your mouth when there's food close to it. But, please (for insurance reasons) don't eat anything that's NOT food. Like crystal balls, rockets, and instruments. Don't eat those.\n\nTo eat on the internet, we had to invoke some pretty powerful magic. We're still working out the kinks. If you position your head so it is centered and filling up most of the frame, the magic is more likely to work. And make sure to open your mouth wide!\n\nLet's get started. Bon Appetit!"
   );
 }
 
@@ -196,8 +210,8 @@ class MovingObject {
   constructor() {
     // Give it a random starting position, 'fenced' at 50px window border
     this.position = {
-      x: parseInt(100 + Math.random() * (window.innerWidth - 200)),
-      y: parseInt(100 + Math.random() * (window.innerHeight - 200))
+      x: parseInt(100 + Math.random() * (window.innerWidth - 300)),
+      y: parseInt(100 + Math.random() * (window.innerHeight - 300))
     };
 
     // Give it a random starting velocity
@@ -208,9 +222,9 @@ class MovingObject {
     Math.random() < 0.5 ? (x = velX * -1 * 10) : (x = velX * 10);
     Math.random() < 0.5 ? (y = velY * -1 * 10) : (y = velY * 10);
     // Make sure that neither x nor y velocities are 0
-    x >= 0 ? parseInt(x++) : parseInt(x--);
-    y >= 0 ? parseInt(y++) : parseInt(y--);
-    this.velocity = { x: x, y: y };
+    x >= 0 ? x++ : x--;
+    y >= 0 ? y++ : y--;
+    this.velocity = { x: parseInt(x), y: parseInt(y) };
 
     // Add an 'eaten' property so an object can only be eaten once
     this.eaten = false;
