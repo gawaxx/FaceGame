@@ -3,44 +3,19 @@ const allElems = [];
 let isGameOver = false;
 let intervals = [];
 
-var video = document.querySelector("#videoElement");
+// video.style.cssText =
+//   "-moz-transform: scale(-1, 1); \
+// -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
+// transform: scale(-1, 1); filter: FlipH;";
 allElems.push(video);
 var mouthPoints = [];
 
 const body = document.querySelector("body");
 const mainContainer = document.querySelector(".container");
-
+var video = document.querySelector("#videoElement");
 const getScoreBoard = document.querySelector("#scoreboard");
+const header = document.querySelector("h1");
 let scoreBoard = 0;
-
-const ApiURL = "http://localhost:3000/score_boards";
-const UserURL = "http://localhost:3000/users/";
-// API Stuff
-
-const headers = {
-  "Content-Type": "application/json",
-  Accept: "application/json"
-};
-
-const getApi = url => {
-  return fetch(url).then(resp => resp.json());
-};
-const patchApi = (url, patchInfo) => {
-  return fetch(url, {
-    method: "PATCH",
-    headers: headers,
-    body: JSON.stringify(patchInfo)
-  }).then(resp => resp.json());
-};
-const postApi = (url, postInfo) => {
-  return fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: JSON.stringify(postInfo)
-  }).then(resp => resp.json());
-};
-
-const API = { getApi, patchApi, postApi };
 
 // Code
 
@@ -53,43 +28,48 @@ Promise.all([
   faceapi.nets.faceLandmark68TinyNet.loadFromUri("../src/models")
   // faceapi.nets.faceLandmark68Net.loadFromUri("../src/models"),
   // faceapi.nets.ssdMobilenetv1.loadFromUri("../src/models")
-]).then(start);
+]).then(run);
 
-function start() {
-  navigator.getUserMedia(
-    { video: {} },
-    stream => (video.srcObject = stream),
-    err => console.error(err)
-  );
+function run() {
+  // alert(
+  //   "Welcome to Bon APPetit! 🍽 In order to play, you'll need to grant the site access to your camera.\n\nClose this message, and then choose 'Allow' when your browser asks if you'd like to share your camera."
+  // );
+  navigator.mediaDevices
+    .getUserMedia({ video: true })
+    .then(stream => (video.srcObject = stream))
+    .catch(err => alert(`${err})`));
+  // alert(
+  //   "Great! Welcome to our restaurant. The chef's have been working with some rather... exotic... ingredients. To be honest, they're just throwing food around at this point.\n\nEat like you normally do: just open your mouth when there's food close to it. But, please (for insurance reasons) don't eat anything that's NOT food. Like crystal balls, rockets, and instruments. Don't eat those.\n\nTo eat on the internet, we had to invoke some pretty powerful magic. We're still working out the kinks. If you position your head so it is centered and filling up most of the frame, the magic is more likely to work. And make sure to open your mouth wide!\n\nLet's get started. Bon Appetit!"
+  // );
+  video.addEventListener("play", () => {
+    // const canvas = faceapi.createCanvasFromMedia(video);
+    // document.body.append(canvas);
+    // const displaySize = { width: video.width, height: video.height };
+    // faceapi.matchDimensions(canvas, displaySize);
+
+    setInterval(async () => {
+      const detections = await faceapi.detectSingleFace(
+        video,
+        new faceapi.TinyFaceDetectorOptions()
+      );
+      // .withFaceLandmarks(); // removed from detectSingleFace to test if we can just load Tiny instead of full net
+      // let box = detections.detection.box;
+      let box = detections.box;
+      let rect = video.getBoundingClientRect();
+      let landmarks = await faceapi.detectFaceLandmarksTiny(video);
+      mouthRelativePositions = landmarks.relativePositions.slice(-20);
+      getMouthCoordinates(mouthRelativePositions, box, rect);
+
+      // const resizedDetections = faceapi.resizeResults(detections, displaySize);
+      // canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+      // faceapi.draw.drawDetections(canvas, resizedDetections);
+      // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+    }, 200);
+  });
+  startGame()
 }
 
-video.addEventListener("play", () => {
-  // const canvas = faceapi.createCanvasFromMedia(video);
-  // document.body.append(canvas);
-  // const displaySize = { width: video.width, height: video.height };
-  // faceapi.matchDimensions(canvas, displaySize);
-
-  setInterval(async () => {
-    const detections = await faceapi.detectSingleFace(
-      video,
-      new faceapi.TinyFaceDetectorOptions()
-    );
-    // .withFaceLandmarks(); // removed from detectSingleFace to test if we can just load Tiny instead of full net
-    // let box = detections.detection.box;
-    let box = detections.box;
-    let rect = video.getBoundingClientRect();
-    let landmarks = await faceapi.detectFaceLandmarksTiny(video);
-    mouthRelativePositions = landmarks.relativePositions.slice(-20);
-    getMouthCoordinates(mouthRelativePositions, box, rect);
-
-    // const resizedDetections = faceapi.resizeResults(detections, displaySize);
-    // canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-    // faceapi.draw.drawDetections(canvas, resizedDetections);
-    // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-  }, 200);
-  startGame();
-});
-
+// Helper Functions for mouth detection
 function getMouthCoordinates(positions, box, rect) {
   mouthPoints = [];
   positions.forEach(point => {
@@ -156,18 +136,11 @@ function startGame() {
   intervals.push(pieceUpdater);
 }
 
-// function gameOver() {
-//   debugger
-//   allElems.forEach(element => element.remove() )
-//   getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
-// }
-
 let gameOver = (function() {
   let executed = false;
   return function() {
     if (!executed) {
       executed = true;
-
       getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`;
 
       let person = prompt("Game Over loser ! 👎, Enter Your Name: ", "");
@@ -184,16 +157,13 @@ let gameOver = (function() {
   };
 })();
 
-
-
-// Moving object Class
-
-class MovingObject {
+// This file contains the display, movement, and game logic of pieces.
+class Piece {
   constructor() {
     // Give it a random starting position, 'fenced' at 50px window border
     this.position = {
-      x: parseInt(100 + Math.random() * (window.innerWidth - 200)),
-      y: parseInt(100 + Math.random() * (window.innerHeight - 200))
+      x: parseInt(100 + Math.random() * (window.innerWidth - 300)),
+      y: parseInt(100 + Math.random() * (window.innerHeight - 300))
     };
 
     // Give it a random starting velocity
@@ -204,9 +174,9 @@ class MovingObject {
     Math.random() < 0.5 ? (x = velX * -1 * 10) : (x = velX * 10);
     Math.random() < 0.5 ? (y = velY * -1 * 10) : (y = velY * 10);
     // Make sure that neither x nor y velocities are 0
-    x >= 0 ? parseInt(x++) : parseInt(x--);
-    y >= 0 ? parseInt(y++) : parseInt(y--);
-    this.velocity = { x: x, y: y };
+    x >= 0 ? x++ : x--;
+    y >= 0 ? y++ : y--;
+    this.velocity = { x: parseInt(x), y: parseInt(y) };
 
     // Add an 'eaten' property so an object can only be eaten once
     this.eaten = false;
@@ -226,7 +196,7 @@ class MovingObject {
     let bounceX =
       this.position.x <= 50 || this.position.x >= window.innerWidth - 110;
     let bounceY =
-      this.position.y <= 50 || this.position.y >= window.innerHeight - 110;
+      this.position.y <= 50 || this.position.y >= window.innerHeight - 150;
     if (bounceX) this.velocity.x *= -1;
     if (bounceY) this.velocity.y *= -1;
 
@@ -271,7 +241,7 @@ class MovingObject {
         isGameOver = true;
         gameOver();
       } else {
-        // console.log("GNOM NOM NOM");
+        // header.innerText = "Delicieux! 👌🏼";
         this.eaten = true;
         this.element.remove();
         scoreBoard += 1000;
@@ -281,50 +251,37 @@ class MovingObject {
   }
 }
 
-class Food extends MovingObject {
+class Food extends Piece {
   constructor() {
     super();
     const food = [
-      "🍏",
       "🍎",
       "🍐",
       "🍊",
-      "🍋",
       "🍌",
       "🍉",
       "🍇",
       "🍓",
-      "🍈",
       "🍒",
       "🍑",
-      "🍍",
-      "🥭",
       "🥥",
-      "🥝",
-      "🍅",
       "🍆",
       "🥑",
-      "🥦",
       "🥒",
       "🥬",
-      "🌶",
       "🌽",
       "🥕",
       "🥔",
-      "🍠",
       "🥐",
       "🍞",
       "🥖",
       "🥨",
-      "🥯",
       "🧀",
       "🥚",
       "🍳",
       "🥞",
       "🥓",
-      "🥩",
       "🍗",
-      "🍖",
       "🌭",
       "🍔",
       "🍟",
@@ -335,7 +292,6 @@ class Food extends MovingObject {
       "🌯",
       "🥗",
       "🥘",
-      "🥫",
       "🍝",
       "🍜",
       "🍲",
@@ -350,8 +306,6 @@ class Food extends MovingObject {
       "🍥",
       "🥮",
       "🥠",
-      "🍢",
-      "🍡",
       "🍧",
       "🍨",
       "🍦",
@@ -365,16 +319,8 @@ class Food extends MovingObject {
       "🍿",
       "🍩",
       "🍪",
-      "🌰",
-      "🥜",
       "🍯",
-      "🍺",
-      "🍻",
-      "🥂",
       "🍷",
-      "🥃",
-      "🍸",
-      "🍹",
       "🍾"
     ];
     const item = food[parseInt(Math.random() * food.length)];
@@ -383,7 +329,7 @@ class Food extends MovingObject {
   }
 }
 
-class NotFood extends MovingObject {
+class NotFood extends Piece {
   constructor() {
     super();
     const notFood = [
@@ -401,7 +347,6 @@ class NotFood extends MovingObject {
       "🗿",
       "🗽",
       "🛸",
-      "⚓️",
       "⏰",
       "🔮",
       "📸",
@@ -411,8 +356,6 @@ class NotFood extends MovingObject {
       "🔫",
       "🔧",
       "📦",
-      "🛒",
-      "🧶",
       "🎁",
       "📌",
       "📫",
