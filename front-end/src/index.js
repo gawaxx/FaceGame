@@ -188,15 +188,15 @@ let gameOver = (function() {
             name: person
           }
 
-          API.postApi(UserURL, postInfoUr).then(
-            user => function(){
+          API.postApi(UserURL, postInfoUr)
+            .then(user => {
               let postInfoSc = {
                 count: scoreBoard,
                 user_id: user.id
               }
-    
-              API.postApi(ApiURL, postInfoSc).then(window.location.href = "../public/scoreboard.html")
+              return API.postApi(ApiURL, postInfoSc)
             })
+            .then(window.location.href = "../public/scoreboard.html")
 
 
       }

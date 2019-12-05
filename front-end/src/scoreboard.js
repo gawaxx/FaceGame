@@ -27,15 +27,14 @@ const API = { getApi, patchApi, postApi };
 
 // Functions 
 
-document.addEventListener('DOMContentLoaded', () => {
-  API.getApi(ApiURL).then(data => data.forEach(scoreboard => renderScore(scoreboard)))
-})
+// document.addEventListener('DOMContentLoaded', () => {
+  API.getApi(ApiURL).then(data => data.map(scoreboard => renderScore(scoreboard)))
+// })
 
 // function getStuff(event) {
   // event.preventDefault()
   // API.getApi(ApiURL).then(data => data.forEach(scoreboard => renderScore(scoreboard)))
 // }
-
 
 
 function renderScore(scoreboard) {
