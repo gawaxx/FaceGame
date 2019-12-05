@@ -187,10 +187,7 @@ let gameOver = (function() {
             user_id: 3
           }
 
-          API.postApi(ApiURL, postInfo).then(
-            window.location.href = "../public/scoreboard.html",
-            console.log("OVER HERE")
-            );
+          API.postApi(ApiURL, postInfo).then(window.location.href = "../public/scoreboard.html");
       }
   };
 })();

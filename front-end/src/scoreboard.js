@@ -1,6 +1,6 @@
 // Definitons 
 const ApiURL = "http://localhost:3000/score_boards";
-const table = document.querySelector('.table')
+const table = document.querySelector('tbody')
 
 // API Stuff
 
@@ -27,24 +27,26 @@ const API = { getApi, patchApi, postApi };
 
 // Functions 
 
-document.addEventListener('DOMContentLoaded', (event) => getStuff(event))
+// document.addEventListener('DOMContentLoaded', (event) => getStuff(event))
 
-function getStuff(event) {
-  event.preventDefault()
-  API.getApi(ApiURL).then(data => data.forEach(scoreboard => renderScore(scoreboard)))
-}
+// function getStuff(event) {
+  // event.preventDefault()
+  // API.getApi(ApiURL).then(data => data.forEach(scoreboard => renderScore(scoreboard)))
+// }
+
+API.getApi(ApiURL).then(data => data.forEach(scoreboard => renderScore(scoreboard)))
+
 
 function renderScore(scoreboard) {
-    // debugger
     let newTr = document.createElement('tr')
     let newtdName = document.createElement('td')
-    newtdName.innerHTML = scoreboard.name
+    newtdName.innerHTML = scoreboard.user_id
 
     let newtdScore = document.createElement('td')
     newtdScore.innerHTML = scoreboard.count
 
     let newtdRank = document.createElement('td')
-    newtdRank.innerHTML = ""
+    newtdRank.innerHTML = "NO rank yet"
 
     newTr.append(newtdName, newtdScore, newtdRank)
     table.append(newTr)
