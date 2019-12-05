@@ -151,8 +151,8 @@ class MovingObject {
   constructor() {
     // Give it a random starting position, 'fenced' at 50px window border
     this.position = {
-      x: parseInt(100 + Math.random() * (window.innerWidth - 100)),
-      y: parseInt(100 + Math.random() * (window.innerHeight - 100))
+      x: parseInt(100 + Math.random() * (window.innerWidth - 200)),
+      y: parseInt(100 + Math.random() * (window.innerHeight - 200))
     };
 
     // Give it a random starting velocity
@@ -162,9 +162,13 @@ class MovingObject {
     let y = 0;
     Math.random() < 0.5 ? (x = velX * -1 * 10) : (x = velX * 10);
     Math.random() < 0.5 ? (y = velY * -1 * 10) : (y = velY * 10);
-    x = parseInt(x);
-    y = parseInt(y);
+    // Make sure that neither x nor y velocities are 0
+    x >= 0 ? parseInt(x++) : parseInt(x--);
+    y >= 0 ? parseInt(y++) : parseInt(y--);
     this.velocity = { x: x, y: y };
+
+    // Add an 'eaten' property so an object can only be eaten once
+    this.eaten = false;
 
     // Build the object
     let newDiv = document.createElement("div");
@@ -177,10 +181,11 @@ class MovingObject {
   }
 
   updatePosition() {
+    // Objects should bounce if their border comes within 50 pixels of window edge
     let bounceX =
-      this.position.x <= 50 || this.position.x >= window.innerWidth - 60;
+      this.position.x <= 50 || this.position.x >= window.innerWidth - 110;
     let bounceY =
-      this.position.y <= 50 || this.position.y >= window.innerHeight - 60;
+      this.position.y <= 50 || this.position.y >= window.innerHeight - 110;
     if (bounceX) this.velocity.x *= -1;
     if (bounceY) this.velocity.y *= -1;
 
@@ -212,11 +217,12 @@ class MovingObject {
 
     // if the hit boxes collide in any way AND a player's mouth is open, then the piece is 'eaten'
     if (
+      !this.eaten &&
+      mouthIsOpen() &&
       pieceHitbox.x < mouthHitBox.x + mouthHitBox.width &&
       pieceHitbox.x + pieceHitbox.width > mouthHitBox.x &&
       pieceHitbox.y < mouthHitBox.y + mouthHitBox.height &&
-      pieceHitbox.y + pieceHitbox.height > mouthHitBox.y &&
-      mouthIsOpen()
+      pieceHitbox.y + pieceHitbox.height > mouthHitBox.y
     ) {
       console.log("Collision");
       if (this.element.className === "not-food") {
@@ -225,6 +231,7 @@ class MovingObject {
         this.element.remove();
       } else {
         console.log("GNOM NOM NOM");
+        this.eaten = true;
         this.element.remove();
         scoreBoard++;
         getScoreBoard.innerHTML = scoreBoard;
