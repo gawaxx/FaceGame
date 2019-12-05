@@ -10,4 +10,9 @@ class UsersController < ApplicationController
         render json: user
     end
 
+    def create
+        new_user = ScoreBoard.create(name: params[:name])
+        render json: new_user
+    end 
+
 end

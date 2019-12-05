@@ -182,12 +182,23 @@ let gameOver = (function() {
           getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`
           
           window.alert("Game Over loser ! 👎");
-          let postInfo = {
-            count: scoreBoard,
-            user_id: 3
+          let person = prompt("Game Over loser ! 👎, Enter Your Name: ", "");
+
+          let postInfoUr = {
+            name: person.value 
           }
 
-          API.postApi(ApiURL, postInfo).then(window.location.href = "../public/scoreboard.html");
+          API.postApi(`http://localhost:3000/users/`, postInfoUr).then(
+            user => function(){
+              let postInfoSc = {
+                count: scoreBoard,
+                user_id: user.id
+              }
+    
+              API.postApi(ApiURL, postInfoSc).then(window.location.href = "../public/scoreboard.html")
+            })
+
+
       }
   };
 })();
