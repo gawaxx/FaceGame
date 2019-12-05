@@ -33,9 +33,23 @@ video {
   position: absolute;
   /* left: 25%;
     top: 16%; */
-  /* transform: rotateY(180deg);
-  -webkit-transform:rotateY(180deg); /* Safari and Chrome */
-  /* -moz-transform:rotateY(180deg); Firefox */
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 70px; /* Height of the footer */
+  background: #343a40;
+}
+
+p {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  font-family: "Helvetica Neue";
+  color: #586167;
 }
 
 .scoreboard {
@@ -58,33 +72,6 @@ video {
 
 .not-food {
   /* padding-top: 200px; */
-  height: 60px;
-  position: absolute;
-  width: 60px;
-  font-size: 60px;
-}
-
-.baguette {
-  /* background-color: black; */
-  padding-top: 200px;
-  height: 60px;
-  position: absolute;
-  width: 60px;
-  font-size: 60px;
-}
-
-.WineGlass {
-  /* background-color: black; */
-  padding-top: 200px;
-  height: 60px;
-  position: absolute;
-  width: 60px;
-  font-size: 60px;
-}
-
-.bomb {
-  /* background-color: black; */
-  padding-top: 200px;
   height: 60px;
   position: absolute;
   width: 60px;

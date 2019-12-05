@@ -196,7 +196,7 @@ class Piece {
     let bounceX =
       this.position.x <= 50 || this.position.x >= window.innerWidth - 110;
     let bounceY =
-      this.position.y <= 50 || this.position.y >= window.innerHeight - 110;
+      this.position.y <= 50 || this.position.y >= window.innerHeight - 150;
     if (bounceX) this.velocity.x *= -1;
     if (bounceY) this.velocity.y *= -1;
 
