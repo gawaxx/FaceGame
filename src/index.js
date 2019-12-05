@@ -73,7 +73,6 @@ video.addEventListener("play", () => {
     let landmarks = await faceapi.detectFaceLandmarksTiny(video);
     mouthRelativePositions = landmarks.relativePositions.slice(-20);
     getMouthCoordinates(mouthRelativePositions, box, rect);
-    mouthIsOpen();
 
     // const resizedDetections = faceapi.resizeResults(detections, displaySize);
     // canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
@@ -124,7 +123,7 @@ function mouthIsOpen() {
   // If our mouth measurements is 50% of lip measurement, mouth is open
   opening = parseInt((100 * mouthHeightAvg) / lipHeightAvg);
   let mouthOpen = opening >= 55;
-  console.log(`${opening}% open, ${mouthOpen}`);
+  // console.log(`${opening}% open, ${mouthOpen}`);
   return mouthOpen;
 }
 
