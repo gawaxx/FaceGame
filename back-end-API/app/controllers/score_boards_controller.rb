@@ -11,9 +11,7 @@ class ScoreBoardsController < ApplicationController
     end
 
     def create
-        new_scoreboard = ScoreBoard.new 
-        new_scoreboard.user_id = params[:user_id]
-        new_scoreboard.count = params[:count]
+        new_scoreboard = ScoreBoard.create(user_id: params[:user_id], count: params[:count])
         render json: new_scoreboard
     end 
 
