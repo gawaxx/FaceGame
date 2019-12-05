@@ -3,7 +3,7 @@ const allElems = [];
 let isGameOver = false;
 let intervals = [];
 
-let audio = new Audio('audio_file.mp3');
+let eatenSound = new Audio('../src/sounds/coin1.wav');
 
 // video.style.cssText =
 //   "-moz-transform: scale(-1, 1); \
@@ -244,6 +244,7 @@ class Piece {
         gameOver();
       } else {
         // header.innerText = "Delicieux! 👌🏼";
+        eatenSound.play();
         this.eaten = true;
         this.element.remove();
         scoreBoard += 1000;
