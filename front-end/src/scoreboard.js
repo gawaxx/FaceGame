@@ -27,15 +27,23 @@ const API = { getApi, patchApi, postApi };
 
 // Functions 
 
-API.getApi(ApiURL).then(data => data.map(scoreboard => renderScore(scoreboard)))
-// document.addEventListener('DOMContentLoaded', () => {
-// })
+API.getApi(ApiURL).then(data => sortScore(data)) //.forEach(scoreboard => sortScore(scoreboard)) )          //renderScore(scoreboard)))
 
-// function getStuff(event) {
-  // event.preventDefault()
-  // API.getApi(ApiURL).then(data => data.forEach(scoreboard => renderScore(scoreboard)))
-// }
 
+function sortScore(data) {
+
+  let sortedData = data.sort((a, b) => (a.count < b.count) ? 1 : -1)
+
+  sortedData.forEach(scoreboard => renderScore(scoreboard))
+
+}
+
+function compare(a, b) {
+  if (a > b) return 1;
+  if (b > a) return -1;
+
+  return 0;
+}
 
 function renderScore(scoreboard) {
     let newTr = document.createElement('tr')
