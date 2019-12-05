@@ -11,15 +11,11 @@ class ScoreBoardsController < ApplicationController
     end
 
     def create
+        byebug
         new_scoreboard = ScoreBoard.new 
-        new_scoreboard.user_id = 3
+        new_scoreboard.user_id = params[:user_id]
+        new_scoreboard.count = params[:count]
         render json: new_scoreboard
-        # new_pokemon = Pokemon.new
-        # new_pokemon.nickname = Faker::Name.first_name
-        # new_pokemon.species = Faker::Games::Pokemon.name
-        # new_pokemon.trainer_id = params[:id]
-        # new_pokemon.save
-        # render json: new_pokemon
     end 
 
 end
