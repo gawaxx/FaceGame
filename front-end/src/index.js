@@ -170,25 +170,21 @@ let gameOver = (function() {
 
       getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`;
 
-      // window.alert("Game Over loser ! 👎");
       let person = prompt("Game Over loser ! 👎, Enter Your Name: ", "");
-
-      let postInfoUr = {
+      
+      let postInfo = {
+        count: scoreBoard,
         name: person
-      };
+      }
+      
+      // debugger
 
-      API.postApi(UserURL, postInfoUr)
-        .then(user => {
-          let postInfoSc = {
-            count: scoreBoard,
-            user_id: user.id
-          };
-          return API.postApi(ApiURL, postInfoSc);
-        })
-        .then((window.location.href = "../public/scoreboard.html"));
+      API.postApi(ApiURL, postInfo).then((window.location.href = "../public/scoreboard.html"));
     }
   };
 })();
+
+
 
 // Moving object Class
 

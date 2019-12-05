@@ -27,8 +27,8 @@ const API = { getApi, patchApi, postApi };
 
 // Functions 
 
+API.getApi(ApiURL).then(data => data.map(scoreboard => renderScore(scoreboard)))
 // document.addEventListener('DOMContentLoaded', () => {
-  API.getApi(ApiURL).then(data => data.map(scoreboard => renderScore(scoreboard)))
 // })
 
 // function getStuff(event) {
@@ -40,7 +40,7 @@ const API = { getApi, patchApi, postApi };
 function renderScore(scoreboard) {
     let newTr = document.createElement('tr')
     let newtdName = document.createElement('td')
-    newtdName.innerHTML = scoreboard.user.name
+    newtdName.innerHTML = scoreboard.name
 
     let newtdScore = document.createElement('td')
     newtdScore.innerHTML = scoreboard.count
