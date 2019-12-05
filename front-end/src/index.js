@@ -177,19 +177,22 @@ let gameOver = (function() {
         name: person
       };
 
-      API.postApi(UserURL, postInfoUr)
-        .then(user => {
-          debugger
-          let postInfoSc = {
-            count: scoreBoard,
-            user_id: user.id
-          };
-          return API.postApi(ApiURL, postInfoSc);
-        })
+      debugger
+
+      // API.postApi(UserURL, postInfoUr)
+
+      let postInfoSc = {
+        count: scoreBoard,
+        user_name: 
+      }
+
+      API.postApi(ApiURL, postInfoSc)
         .then((window.location.href = "../public/scoreboard.html"));
     }
   };
 })();
+
+
 
 // Moving object Class
 

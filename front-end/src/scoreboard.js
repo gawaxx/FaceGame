@@ -27,8 +27,8 @@ const API = { getApi, patchApi, postApi };
 
 // Functions 
 
+API.getApi(ApiURL).then(data => data.map(scoreboard => renderScore(scoreboard)))
 // document.addEventListener('DOMContentLoaded', () => {
-  API.getApi(ApiURL).then(data => data.map(scoreboard => renderScore(scoreboard)))
 // })
 
 // function getStuff(event) {
