@@ -13,28 +13,6 @@ body {
     background: linear-gradient(133deg, rgba(253,29,29,1) 0%, rgba(131,58,180,1) 24%, rgba(253,29,29,1) 54%, rgba(252,176,69,1) 73%, rgba(131,58,180,1) 100%);
   }
 
-
-/* Top Style  */
-
-.top {
-    border-style: solid;
-    border-color: white;
-    text-align: center;
-    position: absolute;
-    padding-bottom: 45%;
-    max-height: 10vh;
-    max-width: 50%;
-  }
-  
-  .top h1 {
-    color: white;
-    font-size: 45px;
-  }
-  
-  .top p {
-    color: white;
-    font-size: 20px;
-  }
   
   /* Table Style */
   
@@ -42,10 +20,24 @@ body {
     position: absolute;
     border-style: solid;
     border-color: white;
+    font-size: 40px;
   }
   
   .table p {
     color: white;
+    font-size: 40px;
+  }
+
+  .table h3 {
+    text-align: center;
+    color: white;
+    font-size: 30px;
+  }
+
+  .table h1 {
+    text-align: center;
+    color: white;
+    font-size: 50px;
   }
   
   .table table {
