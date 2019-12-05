@@ -179,6 +179,7 @@ let gameOver = (function() {
 
       API.postApi(UserURL, postInfoUr)
         .then(user => {
+          debugger
           let postInfoSc = {
             count: scoreBoard,
             user_id: user.id
