@@ -41,10 +41,10 @@ window.addEventListener("click", () => {
 });
 
 Promise.all([
-  faceapi.nets.faceLandmark68TinyNet.loadFromUri("../src/models"),
   faceapi.nets.tinyFaceDetector.loadFromUri("../src/models"),
-  faceapi.nets.faceLandmark68Net.loadFromUri("../src/models"),
-  faceapi.nets.ssdMobilenetv1.loadFromUri("../src/models")
+  faceapi.nets.faceLandmark68TinyNet.loadFromUri("../src/models")
+  // faceapi.nets.faceLandmark68Net.loadFromUri("../src/models"),
+  // faceapi.nets.ssdMobilenetv1.loadFromUri("../src/models")
 ]).then(start);
 
 function start() {
@@ -62,41 +62,32 @@ video.addEventListener("play", () => {
   // faceapi.matchDimensions(canvas, displaySize);
 
   setInterval(async () => {
-    const detections = await faceapi
-      .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
-      .withFaceLandmarks();
-
-    let box = detections.detection.box;
+    const detections = await faceapi.detectSingleFace(
+      video,
+      new faceapi.TinyFaceDetectorOptions()
+    );
+    // .withFaceLandmarks(); // removed from detectSingleFace to test if we can just load Tiny instead of full net
+    // let box = detections.detection.box;
+    let box = detections.box;
     let rect = video.getBoundingClientRect();
+    let landmarks = await faceapi.detectFaceLandmarksTiny(video);
+    mouthRelativePositions = landmarks.relativePositions.slice(-20);
+    getMouthCoordinates(mouthRelativePositions, box, rect);
+    mouthIsOpen();
 
     // const resizedDetections = faceapi.resizeResults(detections, displaySize);
     // canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
     // faceapi.draw.drawDetections(canvas, resizedDetections);
     // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-
-    let landmarks = await faceapi.detectFaceLandmarksTiny(video);
-    mouthRelativePositions = landmarks.relativePositions.slice(-20);
-
-    getMouthCoordinates(mouthRelativePositions, box, rect);
-    // mouthIsOpen();
-    // boxCoordinates(box, rect);
   }, 200);
   startGame();
 });
 
-// function boxCoordinates(box, rect) {
-//   theBoxCoordinates = [];
-//   x = box.x + 0.5 * box.width + rect.x;
-//   y = box.y + 0.5 * box.height + rect.y + 100;
-
-//   return (theBoxCoordinates = { x: x, y: y });
-// }
-
 function getMouthCoordinates(positions, box, rect) {
   mouthPoints = [];
   positions.forEach(point => {
-    x = parseInt(rect.x + box.x + point.x * box.width) + 50;
-    y = parseInt(rect.y + box.y + point.y * box.height) + 50;
+    x = parseInt(rect.x + box.x + point.x * box.width);
+    y = parseInt(rect.y + box.y + point.y * box.height);
     mouthPoints.push({ x, y });
   });
   return mouthPoints;
@@ -104,6 +95,7 @@ function getMouthCoordinates(positions, box, rect) {
 
 function mouthIsOpen() {
   let mouth = mouthPoints;
+
   // Get relevant y coordinates from mouthPoints
   let outerLipTopRight = mouth[8].y;
   let outerLipTopMid = mouth[9].y;
@@ -129,18 +121,10 @@ function mouthIsOpen() {
   lipHeightRight = outerLipTopRight - outerLipBottomRight;
   lipHeightAvg = (lipHeightLeft + lipHeightMid + lipHeightRight) / 3;
 
-  // For object detection, we need a mouth middle point.
-  let mouthMiddle = {
-    x: mouth[14].x,
-    y: parseInt((mouth[14].y + mouth[18].y) / 2)
-  };
-  mouthPoints.push(mouthMiddle);
-
   // If our mouth measurements is 50% of lip measurement, mouth is open
   opening = parseInt((100 * mouthHeightAvg) / lipHeightAvg);
-  let mouthOpen = opening >= 50;
-  // console.log(`${opening}% open, ${mouthOpen}`);
-  // console.log(`${mouthMiddle.x}, ${mouthMiddle.y}`);
+  let mouthOpen = opening >= 55;
+  console.log(`${opening}% open, ${mouthOpen}`);
   return mouthOpen;
 }
 
@@ -186,7 +170,9 @@ class MovingObject {
     let newDiv = document.createElement("div");
     this.element = newDiv;
     this.element.style.left = `${this.position.x}px`;
-    this.element.style.bottom = `${this.position.y}px`;
+    this.element.style.bottom = `${window.innerHeight -
+      this.position.y -
+      60}px`;
     body.append(newDiv);
   }
 
@@ -202,24 +188,13 @@ class MovingObject {
     this.position.y += this.velocity.y;
 
     this.element.style.left = `${this.position.x}px`;
-    this.element.style.bottom = `${this.position.y}px`;
+    this.element.style.bottom = `${window.innerHeight -
+      this.position.y -
+      60}px`;
   }
 
-  // collisionHandler() {
-  //   console.log("Collision");
-  //   this.element.remove();
-  //   scoreBoard++;
-  //   getScoreBoard.innerHTML = scoreBoard;
-  //   pieceHitbox = { x: 0, y: 0, width: 0, height: 0 };
-  //   return scoreBoard;
-  //   debugger;
-  // }
-
   collisionCheck() {
-    // let xPosition = parseInt(this.element.style.left.replace("px", ""), 10);
-    // let yPosition =
-    //   window.innerHeight -
-    //   parseInt(this.element.style.bottom.replace("px", ""), 10);
+    // piece hit box is defined as the dimensions and location of its div element
     let pieceHitbox = {
       x: this.position.x,
       y: this.position.y,
@@ -227,14 +202,15 @@ class MovingObject {
       height: 60
     };
 
+    // mouth hit box is defined as a rectangle bounding left lip corner, top lip, bottom lip, and right lip corner
     let mouthHitBox = {
-      x: mouthPoints[3].x,
-      y: mouthPoints[3].y,
-      width: 60,
-      height: 60
+      x: mouthPoints[0].x,
+      y: mouthPoints[9].y,
+      width: mouthPoints[6].x - mouthPoints[0].x,
+      height: mouthPoints[9].y - mouthPoints[3].y
     };
-    console.log(mouthHitBox);
 
+    // if the hit boxes collide in any way AND a player's mouth is open, then the piece is 'eaten'
     if (
       pieceHitbox.x < mouthHitBox.x + mouthHitBox.width &&
       pieceHitbox.x + pieceHitbox.width > mouthHitBox.x &&
@@ -242,14 +218,7 @@ class MovingObject {
       pieceHitbox.y + pieceHitbox.height > mouthHitBox.y &&
       mouthIsOpen()
     ) {
-      // collisionHandler();
       console.log("Collision");
-      // this.element.remove();
-      // scoreBoard++;
-      // getScoreBoard.innerHTML = scoreBoard;
-      // pieceHitbox = { x: 0, y: 0, width: 0, height: 0 };
-      // return scoreBoard;
-      // debugger;
       if (this.element.className === "not-food") {
         // GAME OVER
         console.log("GAME OVER");
@@ -263,39 +232,6 @@ class MovingObject {
     }
   }
 }
-
-// let functionStuff = point => {
-//   let pieceHitbox = { x: xPosition, y: yPosition, width: 60, height: 60 };
-//   let mouthHitBox = { x: point.x, y: point.y, width: 60, height: 60 };
-
-//   if (
-//     pieceHitbox.x < mouthHitBox.x + mouthHitBox.width &&
-//     pieceHitbox.x + pieceHitbox.width > mouthHitBox.x &&
-//     pieceHitbox.y < mouthHitBox.y + mouthHitBox.height &&
-//     pieceHitbox.y + pieceHitbox.height > mouthHitBox.y
-//   ) {
-// API.getApi(ApiURL).then(data => data.forEach( scoreboard => function(scoreboard){
-//   scoreBoard = scoreboard.count
-// }))
-
-// console.log("Collision");
-// this.element.remove();
-// scoreBoard++;
-// getScoreBoard.innerHTML = scoreBoard;
-
-// Post to API at the end of the game
-// let postInfo = {
-//   count: scoreBoard,
-// }
-
-//         // API.postApi(`$[ApiURL}`, postInfo)
-//       }
-//     };
-//     // functionStuff(theBoxCoordinates);
-//   }
-// }
-
-// Definition of objects
 
 class Food extends MovingObject {
   constructor() {

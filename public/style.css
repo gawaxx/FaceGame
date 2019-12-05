@@ -33,7 +33,7 @@ video {
 }
 
 .food {
-  padding-top: 200px;
+  /* padding-top: 200px; */
   height: 60px;
   position: absolute;
   width: 60px;
@@ -41,7 +41,7 @@ video {
 }
 
 .not-food {
-  padding-top: 200px;
+  /* padding-top: 200px; */
   height: 60px;
   position: absolute;
   width: 60px;
