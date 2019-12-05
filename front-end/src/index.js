@@ -66,6 +66,7 @@ function run() {
       // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
     }, 200);
   });
+  startGame()
 }
 
 // Helper Functions for mouth detection
@@ -266,7 +267,6 @@ class Food extends Piece {
       "🍒",
       "🍑",
       "🥥",
-      "🍅",
       "🍆",
       "🥑",
       "🥒",
@@ -371,6 +371,3 @@ class NotFood extends Piece {
     this.element.innerHTML = `${item}`;
   }
 }
-
-run();
-startGame();
