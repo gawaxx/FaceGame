@@ -4,6 +4,7 @@ let isGameOver = false;
 let intervals = [];
 
 let eatenSound = new Audio('../src/sounds/coin1.wav');
+let gameOverSound = new Audio('../src/sounds/game-over.wav')
 
 // video.style.cssText =
 //   "-moz-transform: scale(-1, 1); \
@@ -143,6 +144,7 @@ let gameOver = (function() {
   return function() {
     if (!executed) {
       executed = true;
+      gameOverSound.play()
       getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`;
 
       let person = prompt("Game Over loser ! 👎, Enter Your Name: ", "");
