@@ -34,7 +34,7 @@ function sortScore(data) {
 
   let sortedData = data.sort((a, b) => (a.count < b.count) ? 1 : -1)
 
-  sortedData.map(scoreboard => renderScore(scoreboard, sortedData.indexOf(scoreboard)))
+  sortedData.slice(0, 9).map(scoreboard => renderScore(scoreboard, sortedData.indexOf(scoreboard)))
 
 }
 
