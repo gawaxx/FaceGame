@@ -146,15 +146,17 @@ let gameOver = (function() {
       getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`;
 
       let person = prompt("Game Over loser ! 👎, Enter Your Name: ", "");
-      
-      let postInfo = {
-        count: scoreBoard,
-        name: person
+
+      if (person !== null || person !== "") {
+
+        let postInfo = {
+          count: scoreBoard,
+          name: person
+        }
+  
+        API.postApi(ApiURL, postInfo).then((window.location.href = "../public/scoreboard.html"));
       }
       
-      // debugger
-
-      API.postApi(ApiURL, postInfo).then((window.location.href = "../public/scoreboard.html"));
     }
   };
 })();
