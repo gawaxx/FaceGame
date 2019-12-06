@@ -24,8 +24,8 @@ window.addEventListener("click", () => {
 });
 
 Promise.all([
-  faceapi.nets.tinyFaceDetector.loadFromUri("../src/models"),
-  faceapi.nets.faceLandmark68TinyNet.loadFromUri("../src/models")
+  faceapi.nets.tinyFaceDetector.loadFromUri("./src/models"),
+  faceapi.nets.faceLandmark68TinyNet.loadFromUri("./src/models")
   // faceapi.nets.faceLandmark68Net.loadFromUri("../src/models"),
   // faceapi.nets.ssdMobilenetv1.loadFromUri("../src/models")
 ]).then(run);
