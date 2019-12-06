@@ -3,12 +3,15 @@ const allElems = [];
 let isGameOver = false;
 let intervals = [];
 
+let eatenSound = new Audio('../src/sounds/coin1.wav');
+let gameOverSound = new Audio('../src/sounds/game-over.wav')
+
 // video.style.cssText =
 //   "-moz-transform: scale(-1, 1); \
 // -webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
 // transform: scale(-1, 1); filter: FlipH;";
 allElems.push(video);
-var mouthPoints = [];
+let mouthPoints = [];
 
 const body = document.querySelector("body");
 const mainContainer = document.querySelector(".container");
@@ -141,18 +144,21 @@ let gameOver = (function() {
   return function() {
     if (!executed) {
       executed = true;
+      gameOverSound.play()
       getScoreBoard.innerHTML = `Your score is: ${scoreBoard}`;
 
       let person = prompt("Game Over loser ! 👎, Enter Your Name: ", "");
-      
-      let postInfo = {
-        count: scoreBoard,
-        name: person
+
+      if (person !== null || person !== "") {
+
+        let postInfo = {
+          count: scoreBoard,
+          name: person
+        }
+  
+        API.postApi(ApiURL, postInfo).then((window.location.href = "../public/scoreboard.html"));
       }
       
-      // debugger
-
-      API.postApi(ApiURL, postInfo).then((window.location.href = "../public/scoreboard.html"));
     }
   };
 })();
@@ -242,6 +248,7 @@ class Piece {
         gameOver();
       } else {
         // header.innerText = "Delicieux! 👌🏼";
+        eatenSound.play();
         this.eaten = true;
         this.element.remove();
         scoreBoard += 1000;
